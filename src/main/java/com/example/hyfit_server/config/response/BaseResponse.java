@@ -5,11 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import static com.example.hyfit_server.config.response.BaseResponseStatus.SUCCESS;
 
 
 @Getter
+@Setter
 @AllArgsConstructor
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"})
 public class BaseResponse<T> {
@@ -34,4 +36,14 @@ public class BaseResponse<T> {
         this.message = status.getMessage();
         this.code = status.getCode();
     }
+
+    // validation 오류
+    public BaseResponse(T result, Boolean isSuccess, int code) {
+        this.isSuccess = isSuccess;
+        this.message = "request 형식이 잘못되었습니다.";
+        this.code =  code;
+        this.result = result;
+    }
+
+
 }

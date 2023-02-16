@@ -23,7 +23,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    implementation 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // security
@@ -32,6 +31,12 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     // jwt 종속성
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    // mysql
+    runtimeOnly 'mysql:mysql-connector-java'
+    implementation 'mysql:mysql-connector-java'
+
+    // validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 }
 
