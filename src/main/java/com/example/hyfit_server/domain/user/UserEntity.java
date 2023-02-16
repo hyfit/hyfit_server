@@ -83,10 +83,4 @@ public class UserEntity extends BaseTimeEntity {
                 .build();
     }
 
-
-
-
-
-
-
 }

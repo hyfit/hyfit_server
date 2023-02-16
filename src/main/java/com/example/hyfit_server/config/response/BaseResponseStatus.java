@@ -1,6 +1,7 @@
 package com.example.hyfit_server.config.response;
 
 import lombok.Getter;
+import org.springframework.http.ResponseEntity;
 
 @Getter
 public enum BaseResponseStatus {
@@ -14,9 +15,14 @@ public enum BaseResponseStatus {
      * 2000 : Request 오류
      */
 
+    // user 관련
     EXIST_USER_EMAIL(false,2001,"중복된 이메일입니다."),
     NO_USER_ERROR(false,2002, "이메일에 해당하는 유저가 없습니다."),
     FAIL_TO_LOGIN(false, 2003, "비밀번호가 틀렸습니다."),
+    IS_EXIST_NICKNAME(false,2004,"중복된 닉네임 입니다."),
+
+    // follow 관련
+    ALREADY_FOLLOW_USER(false, 2101, "이미 팔로우한 유저입니다."),
 
     /**
      * 3000 : Response 오류
