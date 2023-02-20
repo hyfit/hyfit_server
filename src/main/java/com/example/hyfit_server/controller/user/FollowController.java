@@ -1,12 +1,11 @@
-package com.example.hyfit_server.controller.follow;
+package com.example.hyfit_server.controller.user;
 
 import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.config.security.JwtTokenProvider;
-import com.example.hyfit_server.domain.user.FollowEntity;
 import com.example.hyfit_server.dto.follow.FollowAddDto;
 import com.example.hyfit_server.dto.follow.FollowDto;
-import com.example.hyfit_server.service.follow.FollowService;
+import com.example.hyfit_server.service.user.FollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/follow")
@@ -25,7 +23,7 @@ public class FollowController {
     private final JwtTokenProvider jwtTokenProvider;
 
     // 해당 유저를 팔로잉 해주는 유저 list (해당 유저의 팔로워)
-    @GetMapping("/getFollower")
+    @GetMapping("/follower")
     public BaseResponse<Map<String,List<String>>> getFollower(HttpServletRequest request) throws BaseException{
         try{
             String token = request.getHeader("X-AUTH-TOKEN"); // header에서 토근 가져오기
@@ -42,7 +40,7 @@ public class FollowController {
     }
 
     // 해당 유저가 팔로잉하는 유저 list (해당 유저의 팔로잉)
-    @GetMapping("/getFollowing")
+    @GetMapping("/following")
     public BaseResponse<Map<String,List<String>>> getFollowing(HttpServletRequest request) throws BaseException{
         try{
             String token = request.getHeader("X-AUTH-TOKEN"); // header에서 토근 가져오기
@@ -80,7 +78,7 @@ public class FollowController {
         }
     }
 
-    @DeleteMapping("/unFollow")
+    @DeleteMapping("")
     public BaseResponse<String> unFollow(HttpServletRequest request, @RequestParam String email) throws BaseException {
         try{
             String token = request.getHeader("X-AUTH-TOKEN"); // header에서 토근 가져오기
