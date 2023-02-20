@@ -24,6 +24,10 @@ public enum BaseResponseStatus {
     // follow 관련
     ALREADY_FOLLOW_USER(false, 2101, "이미 팔로우한 유저입니다."),
 
+    // goal 관련
+
+    EXIST_GOAL_MOUNTAIN(false, 2201, "이미 설정한 목표가 진행중입니다."),
+
     /**
      * 3000 : Response 오류
      */

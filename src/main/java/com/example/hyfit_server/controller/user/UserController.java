@@ -85,7 +85,7 @@ public class UserController {
     }
 
     // 회원 탈퇴 controller
-    @DeleteMapping("/delete")
+    @DeleteMapping("")
     public BaseResponse<String> login(HttpServletRequest request) throws BaseException {
         try{
             String token = request.getHeader("X-AUTH-TOKEN"); // header에서 토근 가져오기

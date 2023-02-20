@@ -1,4 +1,4 @@
-package com.example.hyfit_server.service.follow;
+package com.example.hyfit_server.service.user;
 
 import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.domain.user.FollowEntity;
