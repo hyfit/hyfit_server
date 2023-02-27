@@ -2,6 +2,7 @@ package com.example.hyfit_server.domain.user;
 
 import com.example.hyfit_server.domain.BaseTimeEntity;
 import com.example.hyfit_server.dto.user.UserDto;
+import com.example.hyfit_server.dto.user.UserUpdateDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -22,7 +23,7 @@ public class UserEntity extends BaseTimeEntity {
 
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false ,unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -47,9 +48,11 @@ public class UserEntity extends BaseTimeEntity {
     @Column(nullable = true)
     private String introduce;
 
+    private String grade;
+
 
     @Builder
-    public UserEntity(long userId, UserRole role,String email,String name, String password,String nickName,String phone, String birth, String gender, String profile_img, int user_status, String introduce){
+    public UserEntity(long userId, UserRole role,String email, String name, String password, String nickName, String phone, String birth, String gender, String profile_img, int user_status, String introduce, String grade) {
         this.userId = userId;
         this.role = role;
         this.name = name;
@@ -62,6 +65,7 @@ public class UserEntity extends BaseTimeEntity {
         this.profile_img = profile_img;
         this.user_status = user_status;
         this.introduce = introduce;
+        this.grade = grade;
 
     }
 
@@ -80,7 +84,21 @@ public class UserEntity extends BaseTimeEntity {
                 .user_status(user_status) // user_status 활성화
                 .profile_img(profile_img)
                 .introduce(introduce)
+                .grade(grade)
                 .build();
+    }
+    public UserEntity update(UserUpdateDto userUpdateDto) {
+        this.nickName = userUpdateDto.getNickName();
+        this.phone = userUpdateDto.getPhone();
+        this.birth = userUpdateDto.getBirth();
+        this.profile_img = userUpdateDto.getProfile_img();
+        this.introduce = userUpdateDto.getIntroduce();
+        return this;
+    }
+
+    public UserEntity updatePassword(String password){
+        this.password = password;
+        return this;
     }
 
 }

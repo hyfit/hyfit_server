@@ -20,6 +20,9 @@ public enum BaseResponseStatus {
     NO_USER_ERROR(false,2002, "이메일에 해당하는 유저가 없습니다."),
     FAIL_TO_LOGIN(false, 2003, "비밀번호가 틀렸습니다."),
     IS_EXIST_NICKNAME(false,2004,"중복된 닉네임 입니다."),
+    VALIDATE_TOKEN_ERROR(false, 2005, "유효하지 않은 토근값입니다."),
+    NO_TOKEN_ERROR(false, 2006, "토근값이 없습니다."),
+    PASSWORD_PATTERN_ERROR(false, 2007, "비밀번호는 영어와 숫자를 포함해서 6~12자리 이내로 입력해주세요."),
 
     // follow 관련
     ALREADY_FOLLOW_USER(false, 2101, "이미 팔로우한 유저입니다."),
@@ -27,6 +30,9 @@ public enum BaseResponseStatus {
     // goal 관련
 
     EXIST_GOAL_MOUNTAIN(false, 2201, "이미 설정한 목표가 진행중입니다."),
+    NO_PROGRESS_GOAL(false, 2202, "진행중인 목표가 없습니다."),
+    NO_PROGRESS_DONE(false, 2203, "종료된 목표가 없습니다."),
+
 
     /**
      * 3000 : Response 오류

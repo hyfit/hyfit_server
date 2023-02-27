@@ -6,6 +6,7 @@ import com.example.hyfit_server.config.security.JwtTokenProvider;
 import com.example.hyfit_server.dto.follow.FollowAddDto;
 import com.example.hyfit_server.dto.follow.FollowDto;
 import com.example.hyfit_server.service.user.FollowService;
+import com.example.hyfit_server.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,14 +21,13 @@ import java.util.Map;
 public class FollowController {
 
     private final FollowService followService;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
 
     // 해당 유저를 팔로잉 해주는 유저 list (해당 유저의 팔로워)
     @GetMapping("/follower")
     public BaseResponse<Map<String,List<String>>> getFollower(HttpServletRequest request) throws BaseException{
         try{
-            String token = request.getHeader("X-AUTH-TOKEN"); // header에서 토근 가져오기
-            String userEmail = jwtTokenProvider.getUserPk(token); // 토근에서 이메일 정보 가져오기
+            String userEmail = userService.getEmailFromToken(request);
             Map<String, List<String>> result = new HashMap<String, List<String>>();
             List<String> followerList = followService.getFollower(userEmail);
             result.put(userEmail,followerList);
@@ -43,8 +43,7 @@ public class FollowController {
     @GetMapping("/following")
     public BaseResponse<Map<String,List<String>>> getFollowing(HttpServletRequest request) throws BaseException{
         try{
-            String token = request.getHeader("X-AUTH-TOKEN"); // header에서 토근 가져오기
-            String userEmail = jwtTokenProvider.getUserPk(token); // 토근에서 이메일 정보 가져오기
+            String userEmail = userService.getEmailFromToken(request);
             Map<String, List<String>> result = new HashMap<String, List<String>>();
             List<String> followingList = followService.getFollowing(userEmail);
             result.put(userEmail, followingList);
@@ -63,8 +62,7 @@ public class FollowController {
         try {
             // request에서 follow를 걸 (누군가에게 친구추가를 하는 사람) 유저의 id 가져오기
             // requestParams userId 는 팔로우 요청을 받을 유저
-            String token = request.getHeader("X-AUTH-TOKEN"); // header에서 토근 가져오기
-            String followerEmail = jwtTokenProvider.getUserPk(token); // 토근에서 이메일 정보 가져오기
+            String followerEmail = userService.getEmailFromToken(request);
             FollowAddDto followAddDto = FollowAddDto.builder()
                     .followerEmail(followerEmail)
                     .followingEmail(email)
@@ -81,8 +79,7 @@ public class FollowController {
     @DeleteMapping("")
     public BaseResponse<String> unFollow(HttpServletRequest request, @RequestParam String email) throws BaseException {
         try{
-            String token = request.getHeader("X-AUTH-TOKEN"); // header에서 토근 가져오기
-            String userEmail = jwtTokenProvider.getUserPk(token); // 토근에서 이메일 정보 가져오기
+            String userEmail = userService.getEmailFromToken(request);
             followService.unFollow(userEmail, email);
             String result = email + " 언팔로우 완료";
             return new BaseResponse<>(result);

@@ -5,17 +5,18 @@ import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.config.security.JwtTokenProvider;
 import com.example.hyfit_server.domain.user.UserRole;
-import com.example.hyfit_server.dto.user.UserDto;
-import com.example.hyfit_server.dto.user.UserJoinDto;
-import com.example.hyfit_server.dto.user.UserLoginDto;
+import com.example.hyfit_server.dto.user.*;
 import com.example.hyfit_server.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
@@ -80,16 +81,65 @@ public class UserController {
         catch (BaseException exception) {
            return new BaseResponse<>((exception.getStatus()));
         }
+    }
 
+    // 유저 정보 get by token
+    @GetMapping("")
+    public BaseResponse<UserDto> getUserInfo(HttpServletRequest request) throws BaseException{
+        try{
+            String userEmail = userService.getEmailFromToken(request);
+            UserDto userDto = userService.getUserInfo(userEmail);
+            return new BaseResponse<>(userDto);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
+    // 회원 정보 수정
+    @PatchMapping("")
+    public BaseResponse<UserDto> update(HttpServletRequest request, @RequestBody UserUpdateDto userUpdateDto) throws BaseException {
+        try{
+            String userEmail = userService.getEmailFromToken(request);
+            UserDto userDto = userService.update(userEmail, userUpdateDto);
+            return new BaseResponse<>(userDto);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    // 비밀번호 수정
+    @PatchMapping("/password")
+    public BaseResponse<String> updatePassword(HttpServletRequest request,@Valid @RequestBody UserPasswordDto userPasswordDto , BindingResult bindingResult) throws BaseException{
+        try{
+            String userEmail = userService.getEmailFromToken(request);
+            userService.updatePassword(userEmail,userPasswordDto.getPassword(), bindingResult);
+            String result = "비밀번호 변경 완료.";
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    // 비밀번호 일치 여부
+    @GetMapping("/password-match")
+    public BaseResponse<Boolean> matchPassword(HttpServletRequest request, @RequestParam String password) throws BaseException{
+        try{
+            String userEmail = userService.getEmailFromToken(request);
+            boolean result = userService.matchPassword(userEmail, password);
+                return new BaseResponse<>(result);
+        }  catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
     }
 
     // 회원 탈퇴 controller
     @DeleteMapping("")
     public BaseResponse<String> login(HttpServletRequest request) throws BaseException {
         try{
-            String token = request.getHeader("X-AUTH-TOKEN"); // header에서 토근 가져오기
-            String userEmail = jwtTokenProvider.getUserPk(token); // 토근에서 이메일 정보 가져오기
+            String userEmail = userService.getEmailFromToken(request);
             UserDto userDto = userService.delete(userEmail);
             String result = userDto.getEmail() + " 회원 탈퇴 완료";
             return  new BaseResponse<>(result);

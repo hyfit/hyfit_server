@@ -1,18 +1,21 @@
 package com.example.hyfit_server.service.user;
 
 import com.example.hyfit_server.config.response.BaseException;
+import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.config.security.JwtTokenProvider;
 import com.example.hyfit_server.domain.user.FollowRepository;
 import com.example.hyfit_server.domain.user.UserEntity;
 import com.example.hyfit_server.domain.user.UserRepository;
-import com.example.hyfit_server.dto.user.UserDto;
-import com.example.hyfit_server.dto.user.UserJoinDto;
-import com.example.hyfit_server.dto.user.UserLoginDto;
+import com.example.hyfit_server.dto.user.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,6 +30,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final FollowRepository followRepository;
+
+    private final JwtTokenProvider jwtTokenProvider;
+
 
 
     public UserJoinDto join(UserJoinDto userJoinDto) throws BaseException {
@@ -57,6 +63,37 @@ public class UserService {
         return userDto;
     }
 
+    public UserDto getUserInfo(String userEmail) throws BaseException{
+        UserEntity userEntity = userRepository.findByEmail(userEmail);
+        return userEntity.toDto();
+    }
+
+    // 비밀번호 일치 확인
+    public boolean matchPassword(String userEmail, String password) throws BaseException{
+        UserEntity userEntity = userRepository.findByEmail(userEmail);
+        if(!passwordEncoder.matches(password, userEntity.getPassword())){
+            throw new BaseException(FAIL_TO_LOGIN);
+        }
+        else return true;
+    }
+
+    // 비밀번호 수정
+    public void updatePassword(String userEmail, String password, Errors errors) throws BaseException {
+        if(errors.hasErrors()){
+            throw new BaseException(PASSWORD_PATTERN_ERROR);
+        }
+        UserEntity userEntity = userRepository.findByEmail(userEmail);
+        userEntity.updatePassword(passwordEncoder.encode(password));
+    }
+
+    // 회원 정보 수정
+    public UserDto update(String userEmail, UserUpdateDto userUpdateDto) throws BaseException {
+
+        UserEntity userEntity = userRepository.findByEmail(userEmail);
+        userEntity.update(userUpdateDto);
+        return userEntity.toDto();
+    }
+
     // 회원 탈퇴
     public UserDto delete(String userEmail) throws BaseException{
         UserEntity userEntity = userRepository.findByEmail(userEmail);
@@ -72,6 +109,19 @@ public class UserService {
         userRepository.delete(userEntity);
 
         return userDto;
+    }
+
+
+    public String getEmailFromToken(HttpServletRequest request) throws BaseException {
+        String token = request.getHeader("X-AUTH-TOKEN");
+        if(token == null) {
+            throw new BaseException(NO_TOKEN_ERROR);
+        }
+        if(jwtTokenProvider.validateToken(token) == false){
+            throw new BaseException(VALIDATE_TOKEN_ERROR);
+        }
+        String userEmail = jwtTokenProvider.getUserPk(token);
+        return userEmail;
     }
 
 
