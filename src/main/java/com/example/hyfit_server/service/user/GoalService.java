@@ -23,7 +23,7 @@ public class GoalService {
     private final GoalRepository goalRepository;
 
     public GoalDto addGoal(GoalAddDto goalAddDto) throws BaseException {
-        GoalEntity goalEntity = goalRepository.findByMountainAndEmailAndGoalStatus(goalAddDto.getMountain(), goalAddDto.getEmail(),1);
+        GoalEntity goalEntity = goalRepository.findByPlaceAndEmailAndGoalStatus(goalAddDto.getPlace(), goalAddDto.getEmail(),1);
         if(goalEntity != null){
             throw new BaseException(EXIST_GOAL_MOUNTAIN);
         }
@@ -33,6 +33,9 @@ public class GoalService {
     }
 
     public List<GoalDto> getAllGoalProgress(String email) throws BaseException {
+        if(goalRepository.findAllByEmailAndGoalStatus(email,1).size() == 0){
+            throw new BaseException(NO_PROGRESS_GOAL);
+        }
         List<GoalDto> result = goalRepository.findAllByEmailAndGoalStatus(email,1).
                 stream().map(m -> m.toDto())
                 .collect(Collectors.toList());
@@ -40,6 +43,9 @@ public class GoalService {
     }
 
     public List<GoalDto> getAllGoalDone(String email) throws BaseException {
+        if(goalRepository.findAllByEmailAndGoalStatus(email,0).size() == 0){
+            throw new BaseException(NO_PROGRESS_DONE);
+        }
         List<GoalDto> result = goalRepository.findAllByEmailAndGoalStatus(email,0).
                 stream().map(m -> m.toDto())
                 .collect(Collectors.toList());
@@ -47,8 +53,8 @@ public class GoalService {
     }
 
 
-    public GoalDto modifyGoal(String email, String mountain, String rate) throws BaseException{
-        GoalEntity goalEntity = goalRepository.findByMountainAndEmailAndGoalStatus(mountain,email,1);
+    public GoalDto modifyGoal(long id, String rate) throws BaseException{
+        GoalEntity goalEntity = goalRepository.findByGoalId(id);
         if(Long.parseLong(rate) == 100) { // 달성 완료
             goalEntity = goalEntity.modify(rate,0);
         }
@@ -58,8 +64,8 @@ public class GoalService {
         return goalEntity.toDto();
     }
 
-    public void deleteGoal(String email, String mountain) throws BaseException {
-        GoalEntity goalEntity = goalRepository.findByMountainAndEmailAndGoalStatus(mountain,email,1);
+    public void deleteGoal(long id) throws BaseException {
+        GoalEntity goalEntity = goalRepository.findByGoalId(id);
         goalRepository.delete(goalEntity);
     }
 

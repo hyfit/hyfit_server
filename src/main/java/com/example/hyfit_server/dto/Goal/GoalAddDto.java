@@ -1,9 +1,6 @@
 package com.example.hyfit_server.dto.Goal;
 
 import com.example.hyfit_server.domain.user.GoalEntity;
-import com.example.hyfit_server.domain.user.UserEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +10,9 @@ public class GoalAddDto {
 
     private String email;
 
-    private String mountain;
+    private String place;
+
+    private String type;
 
     private int goalStatus;
 
@@ -25,7 +24,8 @@ public class GoalAddDto {
     public GoalEntity toEntity(){
         GoalEntity goalEntity = GoalEntity.builder()
                 .email(email)
-                .mountain(mountain)
+                .place(place)
+                .type(type)
                 .goalStatus(1)
                 .rate("0")
                 .description(description)

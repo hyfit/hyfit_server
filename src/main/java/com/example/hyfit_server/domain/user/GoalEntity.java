@@ -23,7 +23,11 @@ public class GoalEntity extends BaseTimeEntity {
     private String email;
 
     @Column(nullable = true)
-    private String mountain;
+    private String place;
+
+    // mountain or building
+    @Column(nullable = true)
+    private String type;
 
     @Column(nullable = true)
     private int goalStatus;
@@ -34,10 +38,11 @@ public class GoalEntity extends BaseTimeEntity {
     private String description;
 
     @Builder
-    public GoalEntity(long goalId, String email, String mountain, int goalStatus, String rate, String description){
+    public GoalEntity(long goalId, String email, String place, String type, int goalStatus, String rate, String description){
         this.goalId = goalId;
         this.email = email;
-        this.mountain = mountain;
+        this.place = place;
+        this.type = type;
         this.goalStatus = goalStatus;
         this.rate = rate;
         this.description = description;
@@ -48,7 +53,8 @@ public class GoalEntity extends BaseTimeEntity {
         return  GoalDto.builder().
                 goalId(goalId)
                 .email(email)
-                .mountain(mountain)
+                .place(place)
+                .type(type)
                 .goalStatus(goalStatus)
                 .description(description)
                 .rate(rate)
@@ -60,7 +66,8 @@ public class GoalEntity extends BaseTimeEntity {
         return GoalEntity.builder()
                 .goalId(goalId)
                 .email(email)
-                .mountain(mountain)
+                .place(place)
+                .type(type)
                 .goalStatus(status)
                 .description(description)
                 .rate(rate)

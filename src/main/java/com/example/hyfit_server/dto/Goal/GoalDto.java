@@ -15,7 +15,9 @@ public class GoalDto {
 
     private String email;
 
-    private String mountain;
+    private String place;
+
+    private String type;
 
     private int goalStatus;
 
@@ -29,7 +31,8 @@ public class GoalDto {
         GoalEntity goalEntity = GoalEntity.builder().
                 goalId(goalId)
                 .email(email)
-                .mountain(mountain)
+                .place(place)
+                .type(type)
                 .goalStatus(goalStatus)
                 .rate(rate)
                 .description(description)
@@ -38,11 +41,12 @@ public class GoalDto {
     }
 
     @Builder
-    public GoalDto(long goalId, String email, String mountain, int goalStatus,
+    public GoalDto(long goalId, String email, String place, String type, int goalStatus,
                    String rate, String description){
         this.goalId = goalId;
         this. email = email;
-        this.mountain = mountain;
+        this.place = place;
+        this.type = type;
         this.goalStatus = goalStatus;
         this.rate = rate;
         this.description = description;
