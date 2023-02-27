@@ -20,7 +20,7 @@ public class UserDto {
 
     private String email;
 
-    private String password;
+//    private String password;
 
     private String nickName;
 
@@ -37,11 +37,13 @@ public class UserDto {
     // man, woman
     private String gender;
 
+    private String grade;
+
     /* DTO -> Entity */
     public UserEntity toEntity() {
         UserEntity userEntity = UserEntity.builder()
                 .role(UserRole.ROLE_USER) // 회원가입시 user 권한
-                .password(password)
+//                .password(password)
                 .name(name)
                 .email(email)
                 .birth(birth)
@@ -51,16 +53,18 @@ public class UserDto {
                 .user_status(user_status) // user_status 활성화
                 .profile_img(profile_img)
                 .introduce(introduce)
+                .grade(grade)
                 .build();
         return userEntity;
     }
 
     @Builder
-    public UserDto(long userId, UserRole role,String email,String name, String password,String nickName,String phone, String birth, String gender, String profile_img, int user_status, String introduce){
+    public UserDto(long userId, UserRole role,String email,String name, String password,String nickName,String phone, String birth, String gender, String profile_img, int user_status, String introduce, String grade){
         this.userId = userId;
         this.role = role;
         this.email = email;
-        this.password = password;
+        this.name = name;
+//        this.password = password;
         this.nickName = nickName;
         this.phone = phone;
         this.birth = birth;
@@ -68,7 +72,9 @@ public class UserDto {
         this.profile_img = profile_img;
         this.user_status = user_status;
         this.introduce = introduce;
+        this.grade = grade;
 
     }
+
 
 }
