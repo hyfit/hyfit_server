@@ -41,6 +41,12 @@ dependencies {
     // email
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'redis.clients:jedis:3.3.0'
+
+
+
 }
 
 tasks.named('test') {

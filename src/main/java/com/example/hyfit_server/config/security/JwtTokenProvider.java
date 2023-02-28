@@ -1,6 +1,7 @@
 package com.example.hyfit_server.config.security;
 
 import com.example.hyfit_server.domain.user.UserRole;
+import com.example.hyfit_server.service.redis.RedisService;
 import com.example.hyfit_server.service.user.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -9,6 +10,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
 import java.util.Base64;
 import java.util.Date;
 
@@ -25,19 +28,22 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private final CustomUserDetailsService customUserDetailsService;
+    private final RedisService redisService;
 
     @Value("${jwt.secret}")
     private String secretKey;
 
-    //토큰 유효시간 4시간
-    private Long tokenValidTime = 240 * 60 * 1000L;
+    // access 토큰 유효시간 30분
+    private long AccessTokenValidTime = 30 * 60 * 1000L;
+
+    // refresh 토큰 유효시간 4시간
+    private long RefreshTokenValidTime = 240 * 60 * 1000L;
 
     // secretkey를 인코딩 해줌.
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
-
     //JWT 토큰 생성
     public String createToken(String email, UserRole role) {
 
@@ -49,13 +55,45 @@ public class JwtTokenProvider {
         //private claims
         //claims.put("id", id); // 정보는 key - value 쌍으로 저장.
         claims.put("role", role);
-        return Jwts.builder()
+        String accessToken = Jwts.builder()
                 .setClaims(claims) // 페이로드
                 .setIssuedAt(now) //발행시간
-                .setExpiration(new Date(now.getTime() + tokenValidTime)) // 토큰 만료기한
+                .setExpiration(new Date(now.getTime() + AccessTokenValidTime)) // 토큰 만료기한
                 .signWith(SignatureAlgorithm.HS256, secretKey)  // 서명. 사용할 암호화 알고리즘과 signature 에 들어갈 secretKey 세팅
                 .compact();
+
+        String refreshToken = Jwts.builder()
+                .setClaims(claims) // 페이로드
+                .setIssuedAt(now) //발행시간
+                .setExpiration(new Date(now.getTime() + RefreshTokenValidTime)) // 토큰 만료기한
+                .signWith(SignatureAlgorithm.HS256, secretKey)  // 서명. 사용할 암호화 알고리즘과 signature 에 들어갈 secretKey 세팅
+                .compact();
+        // redis에 저장
+        redisService.setValues(email,accessToken, Duration.ofMinutes(30));
+        redisService.setValues(accessToken,refreshToken, Duration.ofMinutes(240));
+        return accessToken;
     }
+
+    public String reCreateToken(String email, UserRole role){
+        //payload 설정
+        //registered claims
+        Date now = new Date();
+        Claims claims = Jwts.claims()
+                .setSubject(email);
+        //private claims
+        //claims.put("id", id); // 정보는 key - value 쌍으로 저장.
+        claims.put("role", role);
+        String accessToken = Jwts.builder()
+                .setClaims(claims) // 페이로드
+                .setIssuedAt(now) //발행시간
+                .setExpiration(new Date(now.getTime() + AccessTokenValidTime)) // 토큰 만료기한
+                .signWith(SignatureAlgorithm.HS256, secretKey)  // 서명. 사용할 암호화 알고리즘과 signature 에 들어갈 secretKey 세팅
+                .compact();
+
+        redisService.setValues(email,accessToken, Duration.ofMinutes(AccessTokenValidTime));
+        return accessToken;
+    }
+
     //JWT 토큰에서 인증정보 조회
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(this.getUserPk(token));
@@ -81,4 +119,6 @@ public class JwtTokenProvider {
             return false;
         }
     }
+
+
 }
