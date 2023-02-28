@@ -34,17 +34,16 @@ public class JwtTokenProvider {
     private String secretKey;
 
     // access 토큰 유효시간 30분
-    private int AccessTokenValidTime = 30;
+    private long AccessTokenValidTime = 30 * 60 * 1000L;
 
     // refresh 토큰 유효시간 4시간
-    private int RefreshTokenValidTime = 240;
+    private long RefreshTokenValidTime = 240 * 60 * 1000L;
 
     // secretkey를 인코딩 해줌.
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
-
     //JWT 토큰 생성
     public String createToken(String email, UserRole role) {
 
@@ -70,8 +69,8 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)  // 서명. 사용할 암호화 알고리즘과 signature 에 들어갈 secretKey 세팅
                 .compact();
         // redis에 저장
-        redisService.setValues(email,accessToken, Duration.ofMinutes(AccessTokenValidTime));
-        redisService.setValues(accessToken,refreshToken, Duration.ofMinutes(RefreshTokenValidTime));
+        redisService.setValues(email,accessToken, Duration.ofMinutes(30));
+        redisService.setValues(accessToken,refreshToken, Duration.ofMinutes(240));
         return accessToken;
     }
 
