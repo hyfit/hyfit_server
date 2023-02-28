@@ -129,13 +129,13 @@ public class UserService {
     // token 에서 유저 정보 가져오기
     public String getEmailFromToken(HttpServletRequest request) throws BaseException {
         String token = request.getHeader("X-AUTH-TOKEN");
+        String userEmail = jwtTokenProvider.getUserPk(token);
         if(token == null) {
             throw new BaseException(NO_TOKEN_ERROR);
         }
-        if(jwtTokenProvider.validateToken(token) == false){
+        if(redisService.getValues(userEmail) == null){
             throw new BaseException(VALIDATE_TOKEN_ERROR);
         }
-        String userEmail = jwtTokenProvider.getUserPk(token);
         return userEmail;
     }
 

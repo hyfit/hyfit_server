@@ -75,7 +75,7 @@ public class UserController {
             UserRole role = userDto.getRole();
             long id = userDto.getUserId();
             String result = jwtTokenProvider.createToken(Email, role);
-            return  new BaseResponse<>(result);
+            return  new BaseResponse<>(redisService.getValues(Email));
         }
         catch (BaseException exception) {
            return new BaseResponse<>((exception.getStatus()));
