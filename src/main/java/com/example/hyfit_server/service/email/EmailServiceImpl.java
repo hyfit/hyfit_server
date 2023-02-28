@@ -29,10 +29,10 @@ public class EmailServiceImpl implements EmailService{
 
         String msgg="";
         msgg+= "<div style='margin:20px;'>";
-        msgg+= "<h1> This is the authentication mail for hy-fit sign up </h1>";
+        msgg+= "<h1 style='text-align:center'> This is the authentication mail for hy-fit sign up </h1>";
         msgg+= "<br>";
         msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
-        msgg+= "<h3 style='color:blue;'>Authentication code</h3>";
+        msgg+= "<h2 style='color:blue;'>Authentication code</h2>";
         msgg+= "<div style='font-size:130%'>";
         msgg+= "CODE : <strong>";
         msgg+= ePw+"</strong><div><br/> ";

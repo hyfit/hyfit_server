@@ -6,17 +6,15 @@ import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.config.security.JwtTokenProvider;
 import com.example.hyfit_server.domain.user.UserRole;
 import com.example.hyfit_server.dto.user.*;
+import com.example.hyfit_server.service.redis.RedisService;
 import com.example.hyfit_server.service.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
@@ -25,6 +23,8 @@ public class UserController {
 
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final RedisService redisService;
 
     // 회원가입 controller
     @PostMapping("/join")
@@ -64,7 +64,6 @@ public class UserController {
                 String message = objectError.getDefaultMessage();
 
                 System.out.println(fieldEr.getField() + " : " + message);
-
                 sb.append(fieldEr.getField() + " : " + message);
 
             });
@@ -80,6 +79,19 @@ public class UserController {
         }
         catch (BaseException exception) {
            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public BaseResponse<String> logout(HttpServletRequest request) throws BaseException {
+        try{
+            userService.logout(request);
+            String result = "로그아웃 완료.";
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
 
@@ -137,12 +149,23 @@ public class UserController {
 
     // 회원 탈퇴 controller
     @DeleteMapping("")
-    public BaseResponse<String> login(HttpServletRequest request) throws BaseException {
+    public BaseResponse<String> delete(HttpServletRequest request) throws BaseException {
         try{
             String userEmail = userService.getEmailFromToken(request);
             UserDto userDto = userService.delete(userEmail);
             String result = userDto.getEmail() + " 회원 탈퇴 완료";
             return  new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    // 로그인한 유저의 유효성 검사
+    public BaseResponse<Boolean> isValidUser(HttpServletRequest request) throws BaseException{
+        try{
+            boolean result = userService.isValidUser(request);
+            return new BaseResponse<>(result);
         }
         catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
