@@ -33,6 +33,14 @@ public enum BaseResponseStatus {
     NO_PROGRESS_GOAL(false, 2202, "진행중인 목표가 없습니다."),
     NO_PROGRESS_DONE(false, 2203, "종료된 목표가 없습니다."),
 
+    // post 관련
+
+    NO_POST_TITLE(false, 2301, "제목을 입력해주세요."),
+    NO_SAVED_POST(false, 2302, "작성된 게시물이 없습니다."),
+
+    // image 관련
+
+
 
     /**
      * 3000 : Response 오류
