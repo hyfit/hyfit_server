@@ -3,6 +3,7 @@ package com.example.hyfit_server.service.user;
 import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.config.security.JwtTokenProvider;
+import com.example.hyfit_server.domain.post.PostRepository;
 import com.example.hyfit_server.domain.user.FollowRepository;
 import com.example.hyfit_server.domain.user.UserEntity;
 import com.example.hyfit_server.domain.user.UserRepository;
@@ -32,6 +33,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final FollowRepository followRepository;
+    private final PostRepository postRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     private final RedisService redisService;
@@ -120,6 +122,9 @@ public class UserService {
         // 팔로잉, 팔로워 삭제
         followRepository.deleteAllByFollowerEmail(userEmail);
         followRepository.deleteAllByFollowingEmail(userEmail);
+
+        // 게시물 삭제
+        postRepository.deleteAllByEmail(userEmail);
 
         userRepository.delete(userEntity);
 
