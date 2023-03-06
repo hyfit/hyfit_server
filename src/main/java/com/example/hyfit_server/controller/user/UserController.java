@@ -78,7 +78,7 @@ public class UserController {
             return  new BaseResponse<>(redisService.getValues(Email));
         }
         catch (BaseException exception) {
-           return new BaseResponse<>((exception.getStatus()));
+            return new BaseResponse<>((exception.getStatus()));
         }
     }
 
@@ -141,7 +141,7 @@ public class UserController {
         try{
             String userEmail = userService.getEmailFromToken(request);
             boolean result = userService.matchPassword(userEmail, password);
-                return new BaseResponse<>(result);
+            return new BaseResponse<>(result);
         }  catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }

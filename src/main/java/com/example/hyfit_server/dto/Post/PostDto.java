@@ -22,6 +22,7 @@ public class PostDto {
 
     private String content;
 
+
     public PostEntity toEntity() {
         PostEntity postEntity = PostEntity.builder()
                 .postId(postId)

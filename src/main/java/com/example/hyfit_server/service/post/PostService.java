@@ -64,5 +64,4 @@ public class PostService {
         PostEntity postEntity = postRepository.findByPostId(id);
         postRepository.delete(postEntity);
     }
-
 }

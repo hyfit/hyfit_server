@@ -13,6 +13,4 @@ public interface PostRepository extends JpaRepository<PostEntity,Long>{
     PostEntity findByPostId(long id);
 
     void deleteAllByEmail(String email);
-
-
 }

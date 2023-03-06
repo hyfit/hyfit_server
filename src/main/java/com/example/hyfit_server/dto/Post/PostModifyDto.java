@@ -15,6 +15,4 @@ public class PostModifyDto {
     private String title;
 
     private String content;
-
-
 }

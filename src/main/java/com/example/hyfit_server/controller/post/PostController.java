@@ -21,9 +21,7 @@ import java.util.List;
 @RestController
 public class PostController {
 
-    @Autowired
     private final PostService postService;
-    @Autowired
     private final UserService userService;
 
     @PostMapping("/save")
