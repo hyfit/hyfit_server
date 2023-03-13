@@ -36,4 +36,9 @@ public class RedisService {
     public void deleteValues(String key) {
         redisTemplate.delete(key);
     }
+
+    // 키 값 변경
+    public void renameKey(String key, String newKey){
+        redisTemplate.rename(key, newKey);
+    }
 }
