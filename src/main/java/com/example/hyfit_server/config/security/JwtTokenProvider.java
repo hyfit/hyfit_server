@@ -90,7 +90,7 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)  // 서명. 사용할 암호화 알고리즘과 signature 에 들어갈 secretKey 세팅
                 .compact();
 
-        redisService.setValues(email,accessToken, Duration.ofMinutes(AccessTokenValidTime));
+        redisService.setValues(email,accessToken, Duration.ofMinutes(30));
         return accessToken;
     }
 
