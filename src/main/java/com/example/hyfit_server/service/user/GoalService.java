@@ -31,7 +31,15 @@ public class GoalService {
         GoalEntity goalResult = goalRepository.save(goalAddDto.toEntity());
         return goalResult.toDto();
     }
-
+    public List<GoalDto> getAllGoal(String email) throws BaseException {
+        if(goalRepository.findAllByEmailAndGoalStatus(email,1).size() == 0){
+            throw new BaseException(NO_PROGRESS_GOAL);
+        }
+        List<GoalDto> result = goalRepository.findAllByEmail(email).
+                stream().map(m -> m.toDto())
+                .collect(Collectors.toList());
+        return result;
+    }
     public List<GoalDto> getAllGoalProgress(String email) throws BaseException {
         if(goalRepository.findAllByEmailAndGoalStatus(email,1).size() == 0){
             throw new BaseException(NO_PROGRESS_GOAL);

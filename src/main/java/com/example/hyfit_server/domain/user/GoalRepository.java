@@ -12,5 +12,7 @@ public interface GoalRepository extends JpaRepository<GoalEntity,Long> {
 
     GoalEntity findByGoalId(long id);
 
+    List<GoalEntity> findAllByEmail(String email);
+
 
 }

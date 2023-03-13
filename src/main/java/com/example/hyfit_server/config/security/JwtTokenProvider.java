@@ -70,7 +70,7 @@ public class JwtTokenProvider {
                 .compact();
         // redis에 저장
         redisService.setValues(email,accessToken, Duration.ofMinutes(30));
-        redisService.setValues(accessToken,refreshToken, Duration.ofMinutes(240));
+        redisService.setValues(accessToken,refreshToken, Duration.ofHours(4));
         return accessToken;
     }
 
