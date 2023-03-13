@@ -163,9 +163,9 @@ public class UserController {
 
     // 로그인한 유저의 유효성 검사
     @GetMapping("/valid")
-    public BaseResponse<Boolean> isValidUser(HttpServletRequest request) throws BaseException{
+    public BaseResponse<String> isValidUser(HttpServletRequest request) throws BaseException{
         try{
-            boolean result = userService.isValidUser(request);
+            String result = userService.isValidUser(request);
             return new BaseResponse<>(result);
         }
         catch (BaseException exception) {

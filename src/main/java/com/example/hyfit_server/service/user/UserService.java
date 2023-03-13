@@ -138,14 +138,14 @@ public class UserService {
         if(token == null) {
             throw new BaseException(NO_TOKEN_ERROR);
         }
-        if(redisService.getValues(userEmail) == null){
+        if(redisService.getValues(token) == null){
             throw new BaseException(VALIDATE_TOKEN_ERROR);
         }
         return userEmail;
     }
 
     // 로그인한 유저의 유효성 검사
-    public Boolean isValidUser(HttpServletRequest request) throws BaseException {
+    public String isValidUser(HttpServletRequest request) throws BaseException {
         String token = request.getHeader("X-AUTH-TOKEN");
         String userEmail = getEmailFromToken(request);
         UserEntity userEntity = userRepository.findByEmail(userEmail);
@@ -155,18 +155,18 @@ public class UserService {
             if(redisService.getValues(token) != null) {
                 // token 재발급
                 jwtTokenProvider.reCreateToken(userEmail, userEntity.getRole());
-                return true;
+                return redisService.getValues(userEmail);
             }
             // 1-2 access token 만료, refresh 없음
             else {
                 // 로그아웃
-                return false;
+                return "invalid";
             }
         }
         // 2. access token 만료 안된경우
         else {
             // 로그인 유지
-            return true;
+            return "valid";
         }
 
     }
