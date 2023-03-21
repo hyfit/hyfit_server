@@ -1,10 +1,13 @@
 package com.example.hyfit_server.service.user;
 
 import com.example.hyfit_server.config.response.BaseException;
+import com.example.hyfit_server.domain.place.PlaceRepository;
 import com.example.hyfit_server.domain.user.GoalEntity;
 import com.example.hyfit_server.domain.user.GoalRepository;
 import com.example.hyfit_server.dto.Goal.GoalAddDto;
 import com.example.hyfit_server.dto.Goal.GoalDto;
+import com.example.hyfit_server.dto.Goal.PlaceDto;
+import com.example.hyfit_server.dto.Goal.PlaceReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ import static com.example.hyfit_server.config.response.BaseResponseStatus.*;
 public class GoalService {
 
     private final GoalRepository goalRepository;
+    private final PlaceRepository placeRepository;
 
     public GoalDto addGoal(GoalAddDto goalAddDto) throws BaseException {
         GoalEntity goalEntity = goalRepository.findByPlaceAndEmailAndGoalStatus(goalAddDto.getPlace(), goalAddDto.getEmail(),1);
@@ -75,6 +79,13 @@ public class GoalService {
     public void deleteGoal(long id) throws BaseException {
         GoalEntity goalEntity = goalRepository.findByGoalId(id);
         goalRepository.delete(goalEntity);
+    }
+
+    public List<PlaceDto> getPlace(PlaceReq placeReq) throws BaseException{
+        List<PlaceDto> result = placeRepository.findAllByTypeAndContinents(placeReq.getType(), placeReq.getContinents())
+                .stream().map(m->m.toDto())
+                .collect(Collectors.toList());
+        return result;
     }
 
 }

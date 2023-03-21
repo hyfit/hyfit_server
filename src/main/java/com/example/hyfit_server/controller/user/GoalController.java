@@ -7,6 +7,8 @@ import com.example.hyfit_server.domain.user.GoalEntity;
 import com.example.hyfit_server.domain.user.GoalRepository;
 import com.example.hyfit_server.dto.Goal.GoalAddDto;
 import com.example.hyfit_server.dto.Goal.GoalDto;
+import com.example.hyfit_server.dto.Goal.PlaceDto;
+import com.example.hyfit_server.dto.Goal.PlaceReq;
 import com.example.hyfit_server.service.user.GoalService;
 import com.example.hyfit_server.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class GoalController {
 
     private final GoalService goalService;
     private final UserService userService;
+
 
     @PostMapping("/add")
     public BaseResponse<GoalDto> addGoal(HttpServletRequest request, @RequestBody GoalAddDto goalAddDto) throws BaseException {
@@ -94,6 +97,17 @@ public class GoalController {
             return new BaseResponse<>((exception.getStatus()));
         }
 
+    }
+
+    @GetMapping("/place")
+    public BaseResponse<List<PlaceDto>> getPlace(@RequestBody PlaceReq placeReq) throws BaseException {
+        try{
+            List<PlaceDto> result = goalService.getPlace(placeReq);
+            return  new BaseResponse<>(result);
+        }
+        catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
     }
 
 }
