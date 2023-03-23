@@ -100,9 +100,9 @@ public class GoalController {
     }
 
     @GetMapping("/place")
-    public BaseResponse<List<PlaceDto>> getPlace(@RequestBody PlaceReq placeReq) throws BaseException {
+    public BaseResponse<List<PlaceDto>> getPlace(@RequestParam(value="type") String type, @RequestParam(value="continents") String continents)  throws BaseException {
         try{
-            List<PlaceDto> result = goalService.getPlace(placeReq);
+            List<PlaceDto> result = goalService.getPlace(type, continents);
             return  new BaseResponse<>(result);
         }
         catch (BaseException exception){

@@ -81,11 +81,12 @@ public class GoalService {
         goalRepository.delete(goalEntity);
     }
 
-    public List<PlaceDto> getPlace(PlaceReq placeReq) throws BaseException{
-        List<PlaceDto> result = placeRepository.findAllByTypeAndContinents(placeReq.getType(), placeReq.getContinents())
+    public List<PlaceDto> getPlace(String type, String continents) throws BaseException{
+        List<PlaceDto> result = placeRepository.findAllByTypeAndContinents(type, continents)
                 .stream().map(m->m.toDto())
                 .collect(Collectors.toList());
         return result;
     }
+
 
 }
