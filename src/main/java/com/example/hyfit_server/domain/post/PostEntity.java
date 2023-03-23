@@ -22,11 +22,8 @@ public class PostEntity extends BaseTimeEntity {
 
     private String email;
 
-    @Column(nullable = true)
-    private long boardId;
 
-    @Column(nullable = true)
-    private long locationId;
+    private long exercise_data_id;
 
     @Size(max = 100)
     @Column(nullable = false)
@@ -36,11 +33,10 @@ public class PostEntity extends BaseTimeEntity {
 
 
     @Builder
-    public PostEntity(long postId, String email, long boardId, long locationId, String title, String content){
+    public PostEntity(long postId, String email, long exercise_data_id,String title, String content){
         this.postId = postId;
         this.email = email;
-        this.boardId = boardId;
-        this.locationId = locationId;
+        this.exercise_data_id = exercise_data_id;
         this.title = title;
         this.content = content;
     }
@@ -49,16 +45,17 @@ public class PostEntity extends BaseTimeEntity {
         return PostDto.builder()
                 .postId(postId)
                 .email(email)
-                .boardId(boardId)
-                .location_id(locationId)
+                .exercise_data_id(exercise_data_id)
                 .title(title)
                 .content(content)
                 .build();
     }
 
-    public PostEntity modify(PostModifyDto postModifyDto) {
-        this.title = postModifyDto.getTitle();
-        this.content = postModifyDto.getContent();
-        return this;
+    public void modifyTitle(String title) {
+        this.title = title;
+    }
+
+    public void modifyContent(String content) {
+        this.content = content;
     }
 }

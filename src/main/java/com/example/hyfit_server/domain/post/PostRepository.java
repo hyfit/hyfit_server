@@ -10,7 +10,7 @@ public interface PostRepository extends JpaRepository<PostEntity,Long>{
 
     PostEntity findByEmailAndPostId(String email, long postId);
 
-    PostEntity findByPostId(long id);
+    PostEntity findByPostId(long postId);
 
     void deleteAllByEmail(String email);
 }

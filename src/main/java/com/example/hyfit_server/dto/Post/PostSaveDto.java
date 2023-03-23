@@ -13,21 +13,17 @@ public class PostSaveDto {
 
     private String email;
 
-    private long boardId;
-
-    private long locationId;
+    private long exercise_data_id;
 
     @NotBlank(message = "제목을 입력해주세요.")
     private String title;
 
     private String content;
 
-    // location, board 구현 전이라 해당 값 임의로 설정
     public PostEntity toEntity() {
         PostEntity postEntity = PostEntity.builder()
                 .email(email)
-                .boardId(boardId)
-                .locationId(locationId)
+                .exercise_data_id(exercise_data_id)
                 .title(title)
                 .content(content)
                 .build();
@@ -35,10 +31,9 @@ public class PostSaveDto {
     }
 
 //    @Builder
-//    public PostSaveDto(String email, long boardId, long locationId, String title, String content){
+//    public PostSaveDto(String email, long exercise_data_id, String title, String content){
 //        this.email = email;
-//        this.boardId = boardId;
-//        this.locationId = locationId;
+//        this.exercise_data_id = exercise_data_id;
 //        this.title = title;
 //        this.content = content;
 //    }
