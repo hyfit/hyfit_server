@@ -5,6 +5,7 @@ import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.dto.Post.PostDto;
 import com.example.hyfit_server.dto.Post.PostModifyDto;
 import com.example.hyfit_server.dto.Post.PostSaveDto;
+import com.example.hyfit_server.dto.Post.PostTagMapDto;
 import com.example.hyfit_server.service.post.PostService;
 import com.example.hyfit_server.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +38,10 @@ public class PostController {
         }
     }
 
-    @GetMapping("/all")
-    public BaseResponse<List<PostDto>> getAllPosts(HttpServletRequest request) throws BaseException {
+    @GetMapping("")
+    public BaseResponse<List<PostDto>> getAllPosts(@RequestParam String email) throws BaseException {
         try {
-            String email = userService.getEmailFromToken(request);
+//            String email = userService.getEmailFromToken(request);
             List<PostDto> result = postService.getAllPosts(email);
             return new BaseResponse<>(result);
         }
@@ -50,9 +51,9 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public BaseResponse<PostDto> getOnePost(HttpServletRequest request, @PathVariable("id") long id) throws BaseException{
+    public BaseResponse<PostDto> getOnePost(@PathVariable("id") long id, @RequestParam String email) throws BaseException{
         try{
-            String email = userService.getEmailFromToken(request);
+//            String email = userService.getEmailFromToken(request);
             PostDto postDto = postService.getOnePost(email, id);
             return new BaseResponse<>(postDto);
         }
@@ -62,10 +63,10 @@ public class PostController {
     }
 
     @PatchMapping("/modify/{id}")
-    public BaseResponse<PostDto> modify(HttpServletRequest request, @PathVariable("id")long id, @Valid @RequestBody PostModifyDto postModifyDto, BindingResult bindingResult) throws BaseException {
+    public BaseResponse<PostDto> modify(HttpServletRequest request, @PathVariable("id")long id,@RequestBody PostModifyDto postModifyDto) throws BaseException {
         try{
             String email = userService.getEmailFromToken(request);
-            PostDto postDto = postService.modify(email, id, postModifyDto, bindingResult);
+            PostDto postDto = postService.modify(email, id, postModifyDto);
             return new BaseResponse<>(postDto);
         }
         catch (BaseException exception) {
@@ -84,4 +85,7 @@ public class PostController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+//    @PostMapping("/tag/save")
+//    public BaseResponse<List<PostTagMapDto>> saveTag()
 }

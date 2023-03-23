@@ -5,14 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class PostModifyDto {
 
-    @NotBlank(message = "제목을 입력해주세요.")
-    private String title;
+    private Optional<String> title;
 
-    private String content;
+    private Optional<String> content;
 }
