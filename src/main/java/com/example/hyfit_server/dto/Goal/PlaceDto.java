@@ -19,14 +19,16 @@ public class PlaceDto {
 
     private String altitude;
 
+    private String location;
+
     @Builder
     public PlaceDto(long placeId, String type, String name, String continents,
-                   String altitude){
+                   String altitude, String location){
         this.placeId = placeId;
-        this.type = type;
         this.name = name;
         this.type = type;
         this.continents = continents;
         this.altitude = altitude;
+        this.location = location;
     }
 }

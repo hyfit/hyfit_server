@@ -25,6 +25,8 @@ public class PlaceEntity {
 
     private String altitude;
 
+    private String location;
+
 
     public PlaceDto toDto(){
         return  PlaceDto.builder().
@@ -33,6 +35,7 @@ public class PlaceEntity {
                 .type(type)
                 .continents(continents)
                 .altitude(altitude)
+                .location(location)
                 .build();
     }
 }
