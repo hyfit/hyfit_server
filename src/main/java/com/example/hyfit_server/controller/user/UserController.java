@@ -121,12 +121,25 @@ public class UserController {
         }
     }
 
-    // 비밀번호 수정
+    // 비밀번호 수정 (로그인 후 수정할때)
     @PatchMapping("/password")
     public BaseResponse<String> updatePassword(HttpServletRequest request,@Valid @RequestBody UserPasswordDto userPasswordDto , BindingResult bindingResult) throws BaseException{
         try{
             String userEmail = userService.getEmailFromToken(request);
             userService.updatePassword(userEmail,userPasswordDto.getPassword(), bindingResult);
+            String result = "비밀번호 변경 완료.";
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    // 비밀번호 수정 (비밀번호 잃어버렸을때)
+    @PatchMapping("/forget-password")
+    public BaseResponse<String> updatePassword(@Valid @RequestBody UserForgetPwdDto userForgetPwdDto , BindingResult bindingResult) throws BaseException{
+        try{
+            userService.updatePassword(userForgetPwdDto.getEmail(),userForgetPwdDto.getPassword(), bindingResult);
             String result = "비밀번호 변경 완료.";
             return new BaseResponse<>(result);
         }

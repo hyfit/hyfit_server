@@ -103,6 +103,7 @@ public class UserService {
         userEntity.updatePassword(passwordEncoder.encode(password));
     }
 
+
     // 회원 정보 수정
     public UserDto update(String userEmail, UserUpdateDto userUpdateDto) throws BaseException {
 
