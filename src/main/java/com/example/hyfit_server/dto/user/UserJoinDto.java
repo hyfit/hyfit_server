@@ -23,7 +23,7 @@ public class UserJoinDto {
     private String email;
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
-    @Pattern(regexp="[a-zA-Z1-9]{6,12}",
+    @Pattern(regexp="[a-zA-Z0-9!?@~*^]{6,12}",
             message = "비밀번호는 영어와 숫자를 포함해서 6~12자리 이내로 입력해주세요.")
     private String password;
 

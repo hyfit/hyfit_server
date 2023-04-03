@@ -1,6 +1,5 @@
 package com.example.hyfit_server.controller.user;
 
-
 import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.config.security.JwtTokenProvider;
