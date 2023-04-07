@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @Data
 public class GoalDto {
@@ -25,6 +27,9 @@ public class GoalDto {
 
     private String description;
 
+    private LocalDateTime createdAt;
+
+
 
     /* DTO -> Entity */
     public GoalEntity toEntity(){
@@ -42,7 +47,7 @@ public class GoalDto {
 
     @Builder
     public GoalDto(long goalId, String email, String place, String type, int goalStatus,
-                   String rate, String description){
+                   String rate, String description,LocalDateTime createdAt){
         this.goalId = goalId;
         this. email = email;
         this.place = place;
@@ -50,6 +55,7 @@ public class GoalDto {
         this.goalStatus = goalStatus;
         this.rate = rate;
         this.description = description;
+        this.createdAt = createdAt;
     }
 
 

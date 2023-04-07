@@ -99,6 +99,7 @@ public class GoalController {
 
     }
 
+    // place 대륙별로 가져오기
     @GetMapping("/place")
     public BaseResponse<List<PlaceDto>> getPlace(@RequestParam(value="type") String type, @RequestParam(value="continents") String continents)  throws BaseException {
         try{
@@ -109,5 +110,33 @@ public class GoalController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    // place 대륙별로 가져오기 (페이지네이션)
+    @GetMapping("/place-page")
+    public BaseResponse<List<PlaceDto>> getPlacePage(@RequestParam(value="type") String type, @RequestParam(value="continents") String continents, @RequestParam(value="page") int page)  throws BaseException {
+        try{
+            List<PlaceDto> result = goalService.getPlacePage(type, continents,page);
+            return  new BaseResponse<>(result);
+        }
+        catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    // place의 페이지 개수
+    @GetMapping("/place/page-size")
+    public BaseResponse<Integer> getPlacePageSize(@RequestParam(value="type") String type, @RequestParam(value="continents") String continents) throws BaseException {
+        try{
+            List<PlaceDto> result = goalService.getPlace(type, continents);
+            if( result.size() % 5 == 0){
+                return  new BaseResponse<>(result.size()/5);
+            }
+            else return  new BaseResponse<>(result.size()/5+1);
+        }
+        catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 
 }

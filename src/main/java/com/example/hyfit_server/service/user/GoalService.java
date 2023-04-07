@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,6 +53,7 @@ public class GoalService {
         List<GoalDto> result = goalRepository.findAllByEmailAndGoalStatus(email,1).
                 stream().map(m -> m.toDto())
                 .collect(Collectors.toList());
+        Collections.reverse(result);
         return result;
     }
 
@@ -61,6 +64,7 @@ public class GoalService {
         List<GoalDto> result = goalRepository.findAllByEmailAndGoalStatus(email,0).
                 stream().map(m -> m.toDto())
                 .collect(Collectors.toList());
+        Collections.reverse(result);
         return result;
     }
 
@@ -86,6 +90,15 @@ public class GoalService {
                 .stream().map(m->m.toDto())
                 .collect(Collectors.toList());
         return result;
+    }
+
+    public List<PlaceDto> getPlacePage(String type, String continents,int page) throws BaseException{
+        int pageSize = 5;
+        List<PlaceDto> result = placeRepository.findAllByTypeAndContinents(type, continents)
+                .stream().map(m->m.toDto())
+                .collect(Collectors.toList());
+        List<PlaceDto> pageList = new ArrayList<>(result.subList((page-1)*pageSize, Math.min(page*pageSize, result.size())));
+        return pageList;
     }
 
 
