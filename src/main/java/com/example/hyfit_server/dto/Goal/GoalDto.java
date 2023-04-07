@@ -27,7 +27,7 @@ public class GoalDto {
 
     private String description;
 
-    private LocalDateTime createdAt;
+    private String createdAt;
 
 
 
@@ -47,7 +47,7 @@ public class GoalDto {
 
     @Builder
     public GoalDto(long goalId, String email, String place, String type, int goalStatus,
-                   String rate, String description,LocalDateTime createdAt){
+                   String rate, String description,String createdAt){
         this.goalId = goalId;
         this. email = email;
         this.place = place;

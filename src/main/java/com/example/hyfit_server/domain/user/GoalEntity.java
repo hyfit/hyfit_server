@@ -58,7 +58,7 @@ public class GoalEntity extends BaseTimeEntity {
                 .goalStatus(goalStatus)
                 .description(description)
                 .rate(rate)
-                .createdAt(getCreatedAt())
+                .createdAt(getCreatedAt().toString())
                 .build();
     }
 
