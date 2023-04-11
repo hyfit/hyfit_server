@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/location")
 @RestController
@@ -33,9 +35,9 @@ public class LocationController {
     }
 
     @PostMapping("/redis-exercise")
-    public BaseResponse<String> saveRedisExercise(@RequestBody LocationRedisReq locationReq) throws BaseException{
+    public BaseResponse<List<String>> saveRedisExercise(@RequestBody LocationRedisReq locationReq) throws BaseException{
         try {
-            String result = locationService.saveRedisExercise(locationReq);
+            List<String> result = locationService.saveRedisExercise(locationReq);
             return new BaseResponse<>(result);
         }catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

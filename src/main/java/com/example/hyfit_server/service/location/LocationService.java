@@ -9,10 +9,12 @@ import com.example.hyfit_server.dto.location.LocationRedisReq;
 import com.example.hyfit_server.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.List;
 
 @Slf4j
 @Transactional
@@ -29,13 +31,12 @@ public class LocationService {
 
     }
 
-    public String saveRedisExercise(LocationRedisReq locationReq) throws BaseException {
+    public List<String> saveRedisExercise(LocationRedisReq locationReq) throws BaseException {
         String key = "exercise_" + locationReq.getId();
         String data = locationReq.getLatitude() + "," + locationReq.getLongitude() + "," + locationReq.getAltitude();
-        redisService.rightPushToList(key, data);
-
+        redisService.addToList(key, data);
         // Set expiration time
         redisService.setExpiration(key, Duration.ofDays(2));
-        return data;
+        return redisService.getList(key,0,-1);
     }
 }
