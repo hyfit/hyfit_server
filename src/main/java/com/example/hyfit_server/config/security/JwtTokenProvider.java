@@ -34,8 +34,7 @@ public class JwtTokenProvider {
     private String secretKey;
 
     // access 토큰 유효시간 30분
-    private long AccessTokenValidTime = 30 * 60 * 1000L;
-
+    private long AccessTokenValidTime = 1 * 60 * 1000L;
     // refresh 토큰 유효시간 4시간
     private long RefreshTokenValidTime = 240 * 60 * 1000L;
 
@@ -69,7 +68,7 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)  // 서명. 사용할 암호화 알고리즘과 signature 에 들어갈 secretKey 세팅
                 .compact();
         // redis에 저장
-        redisService.setValues(email,accessToken, Duration.ofMinutes(30));
+        redisService.setValues(email,accessToken, Duration.ofMinutes(1));
         redisService.setValues(accessToken,refreshToken, Duration.ofHours(4));
         return accessToken;
     }
@@ -90,7 +89,7 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)  // 서명. 사용할 암호화 알고리즘과 signature 에 들어갈 secretKey 세팅
                 .compact();
 
-        redisService.setValues(email,accessToken, Duration.ofMinutes(30));
+        redisService.setValues(email,accessToken, Duration.ofMinutes(1));
         return accessToken;
     }
 
