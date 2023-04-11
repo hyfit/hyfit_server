@@ -26,6 +26,10 @@ public class RedisService {
         values.set(key, data, duration);
     }
 
+    public void leftPushToList(String key, String value, Duration duration) {
+        redisTemplate.opsForList().leftPush(key, value);
+    }
+
     // 가져오기
     public String getValues(String key) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();

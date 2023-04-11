@@ -32,7 +32,8 @@ public class LocationService {
     public String saveRedisExercise(LocationRedisReq locationReq) throws BaseException {
         String key = "exercise_" + locationReq.getId();
         String data = locationReq.getLatitude() + "," + locationReq.getLongitude() + "," + locationReq.getAltitude();
-        redisService.setValues(key, data, Duration.ofDays(2));
+//        redisService.setValues(key, data, Duration.ofDays(2));
+        redisService.leftPushToList(key,data,Duration.ofDays(2));
         return data;
     }
 }
