@@ -34,6 +34,7 @@ public class ExerciseService {
     public ExerciseDto exerciseEnd(ExerciseEndReq exerciseEndReq) throws BaseException{
         ExerciseEntity exerciseEntity = exerciseRepository.findByExerciseId(exerciseEndReq.getExerciseId());
         exerciseEntity.exerciseEnd(exerciseEndReq);
+
         return exerciseEntity.toDto();
 
     }

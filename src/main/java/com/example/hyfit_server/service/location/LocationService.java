@@ -39,4 +39,16 @@ public class LocationService {
         redisService.setExpiration(key, Duration.ofDays(2));
         return redisService.getList(key,0,-1);
     }
+
+    public List<String> getAllExerciseList(long id) throws BaseException {
+        String key = "exercise_" + id;
+        return redisService.getList(key,0,-1);
+    }
+
+    public String getMiddleLoc(long id) throws BaseException {
+        String key = "exercise_" + id;
+        int len = redisService.getList(key,0,-1).size();
+        return redisService.getIndexInList(key,len/2);
+
+    }
 }

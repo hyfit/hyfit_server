@@ -28,13 +28,6 @@ public class RedisService {
         values.set(key, data, duration);
     }
 
-    public void leftPushToList(String key, String value) {
-        redisTemplate.opsForList().leftPush(key, value);
-    }
-
-    public void rightPushToList(String key, String value){
-        redisTemplate.opsForList().rightPush(key,value);
-    }
 
     public void setExpiration(String key, Duration duration) {
         redisTemplate.expire(key, duration);
@@ -47,8 +40,9 @@ public class RedisService {
         return redisTemplate.opsForList().range(key, start, end);
     }
 
-
-
+    public String getIndexInList(String key, int index){
+        return  redisTemplate.opsForList().index(key, index);
+    }
     // 가져오기
     public String getValues(String key) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();

@@ -8,10 +8,7 @@ import com.example.hyfit_server.dto.location.LocationExerciseSaveReq;
 import com.example.hyfit_server.dto.location.LocationRedisReq;
 import com.example.hyfit_server.service.location.LocationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,6 +35,26 @@ public class LocationController {
     public BaseResponse<List<String>> saveRedisExercise(@RequestBody LocationRedisReq locationReq) throws BaseException{
         try {
             List<String> result = locationService.saveRedisExercise(locationReq);
+            return new BaseResponse<>(result);
+        }catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @GetMapping("/exercise")
+    public BaseResponse<List<String>> getAllExerciseList(@RequestParam int id) throws BaseException {
+        try{
+            List<String> result = locationService.getAllExerciseList(id);
+            return new BaseResponse<>(result);
+        }catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @GetMapping("/exercise-middle")
+    public BaseResponse<String> getMiddleLocExercise(@RequestParam int id) throws BaseException {
+        try{
+            String result = locationService.getMiddleLoc(id);
             return new BaseResponse<>(result);
         }catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
