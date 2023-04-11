@@ -26,8 +26,16 @@ public class RedisService {
         values.set(key, data, duration);
     }
 
-    public void leftPushToList(String key, String value, Duration duration) {
+    public void leftPushToList(String key, String value) {
         redisTemplate.opsForList().leftPush(key, value);
+    }
+
+    public void rightPushToList(String key, String value){
+        redisTemplate.opsForList().rightPush(key,value);
+    }
+
+    public void setExpiration(String key, Duration duration) {
+        redisTemplate.expire(key, duration);
     }
 
     // 가져오기
