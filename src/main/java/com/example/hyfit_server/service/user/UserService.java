@@ -146,10 +146,8 @@ public class UserService {
     }
 
     // 로그인한 유저의 유효성 검사
-    public String isValidUser(HttpServletRequest request) throws BaseException {
+        public String isValidUser(HttpServletRequest request) throws BaseException {
         String token = request.getHeader("X-AUTH-TOKEN");
-        if(jwtTokenProvider.validateToken(token)==false){
-            // access expired
             if(redisService.getValues(token)!= null){
                 // refresh token 있는 경우
                 String userEmail = jwtTokenProvider.getUserPk(redisService.getValues(token));
@@ -161,13 +159,29 @@ public class UserService {
             else{
                 return "invalid";
             }
-        }
-        // 2. access token 만료 안된경우
-        else {
-            // 로그인 유지
-            return "valid";
-        }
-
     }
+//    public String isValidUser(HttpServletRequest request) throws BaseException {
+//        String token = request.getHeader("X-AUTH-TOKEN");
+//        if(jwtTokenProvider.validateToken(token)==false){
+//            // access expired
+//            if(redisService.getValues(token)!= null){
+//                // refresh token 있는 경우
+//                String userEmail = jwtTokenProvider.getUserPk(redisService.getValues(token));
+//                UserEntity userEntity = userRepository.findByEmail(userEmail);
+//                String newToken = jwtTokenProvider.reCreateToken(userEmail, userEntity.getRole());
+//                redisService.renameKey(token, newToken);
+//                return newToken;
+//            }
+//            else{
+//                return "invalid";
+//            }
+//        }
+//        // 2. access token 만료 안된경우
+//        else {
+//            // 로그인 유지
+//            return "valid";
+//        }
+//
+//    }
 
 }
