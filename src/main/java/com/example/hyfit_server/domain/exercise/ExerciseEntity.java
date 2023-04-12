@@ -57,8 +57,8 @@ public class ExerciseEntity extends BaseTimeEntity  {
                 .email(email)
                 .type(type)
                 .pace(pace)
-                .start(start)
-                .end(end)
+                .start(start.toString())
+                .end(end != null ? end.toString() : "null")
                 .totalTime(totalTime)
                 .distance(distance)
                 .build();
@@ -69,7 +69,7 @@ public class ExerciseEntity extends BaseTimeEntity  {
 
         this.totalTime = exerciseEndReq.getTotalTime();
         this.pace = exerciseEndReq.getPace();
-        this.end = exerciseEndReq.getEnd();
+        this.end = LocalDateTime.parse(exerciseEndReq.getEnd());
         this.distance = exerciseEndReq.getDistance();
         return this;
     }

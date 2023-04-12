@@ -21,9 +21,9 @@ public class ExerciseDto {
 
     private String pace;
 
-    private LocalDateTime start;
+    private String start;
 
-    private LocalDateTime end;
+    private String end;
 
     private long totalTime;
 
@@ -37,8 +37,8 @@ public class ExerciseDto {
                 .email(email)
                 .type(type)
                 .pace(pace)
-                .start(start)
-                .end(end)
+                .start(LocalDateTime.parse(start))
+                .end(LocalDateTime.parse(end))
                 .totalTime(totalTime)
                 .distance(distance)
                 .build();
@@ -46,7 +46,7 @@ public class ExerciseDto {
     }
 
     @Builder
-    public ExerciseDto(long exerciseId, long goalId, String email, String type, String pace,String distance, LocalDateTime start, LocalDateTime end, long totalTime){
+    public ExerciseDto(long exerciseId, long goalId, String email, String type, String pace,String distance, String start, String end, long totalTime){
         this.exerciseId = exerciseId;
         this.goalId = goalId;
         this.email = email;
