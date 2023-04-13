@@ -6,6 +6,7 @@ import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.dto.location.LocationDto;
 import com.example.hyfit_server.dto.location.LocationExerciseSaveReq;
 import com.example.hyfit_server.dto.location.LocationRedisReq;
+import com.example.hyfit_server.dto.location.LocationRedisRes;
 import com.example.hyfit_server.service.location.LocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -51,10 +52,10 @@ public class LocationController {
         }
     }
 
-    @GetMapping("/exercise-middle")
-    public BaseResponse<String> getMiddleLocExercise(@RequestParam int id) throws BaseException {
+    @GetMapping("/redis-exercise")
+    public BaseResponse<LocationRedisRes> getRedisExercise(@RequestParam int id) throws BaseException {
         try{
-            String result = locationService.getMiddleLoc(id);
+            LocationRedisRes result = locationService.getMiddleLoc(id);
             return new BaseResponse<>(result);
         }catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
