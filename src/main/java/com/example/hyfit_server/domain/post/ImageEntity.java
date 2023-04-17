@@ -20,20 +20,20 @@ public class ImageEntity {
     private long postId;
 
     @Column(nullable = false)
-    private String fileName;
+    private String imageUrl;
 
     @Builder
-    public ImageEntity(long imageId, long postId, String fileName){
+    public ImageEntity(long imageId, long postId, String imageUrl){
         this.imageId = imageId;
         this.postId = postId;
-        this.fileName = fileName;
+        this.imageUrl = imageUrl;
     }
 
     public ImageDto toDto() {
         return ImageDto.builder()
                 .imageId(imageId)
                 .postId(postId)
-                .fileName(fileName)
+                .imageUrl(imageUrl)
                 .build();
     }
 }

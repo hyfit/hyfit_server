@@ -13,21 +13,21 @@ public class ImageDto {
 
     private long postId;
 
-    private String fileName;
+    private String imageUrl;
 
     public ImageEntity toEntity() {
         ImageEntity imageEntity = ImageEntity.builder()
                 .postId(postId)
-                .fileName(fileName)
+                .imageUrl(imageUrl)
                 .build();
         return imageEntity;
     }
 
     @Builder
-    public ImageDto(long imageId, long postId, String fileName){
+    public ImageDto(long imageId, long postId, String imageUrl){
         this.imageId = imageId;
         this.postId = postId;
-        this.fileName = fileName;
+        this.imageUrl = imageUrl;
     }
 
 }

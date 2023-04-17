@@ -15,16 +15,13 @@ public class PostSaveDto {
 
     private long exercise_data_id;
 
-    @NotBlank(message = "제목을 입력해주세요.")
-    private String title;
-
+    @NotBlank(message = "내용을 입력해주세요.")
     private String content;
 
     public PostEntity toEntity() {
         PostEntity postEntity = PostEntity.builder()
                 .email(email)
                 .exercise_data_id(exercise_data_id)
-                .title(title)
                 .content(content)
                 .build();
         return postEntity;

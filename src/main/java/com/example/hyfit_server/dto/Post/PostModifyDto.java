@@ -12,7 +12,5 @@ import java.util.Optional;
 @Data
 public class PostModifyDto {
 
-    private Optional<String> title;
-
     private Optional<String> content;
 }
