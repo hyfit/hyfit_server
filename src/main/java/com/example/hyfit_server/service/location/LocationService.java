@@ -37,7 +37,7 @@ public class LocationService {
         String data = locationReq.getLatitude() + "," + locationReq.getLongitude() + "," + locationReq.getAltitude();
         redisService.addToList(key, data);
         // Set expiration time
-        redisService.setExpiration(key, Duration.ofDays(1));
+//        redisService.setExpiration(key, Duration.ofDays(1));
         return redisService.getList(key,0,-1);
     }
 
@@ -56,4 +56,12 @@ public class LocationService {
         LocationRedisRes locationRedisRes = LocationRedisRes.builder().start(firstLoc).middle(middleLoc).end(lastLoc).build();
         return locationRedisRes;
     }
+
+    public List<String> getAllRedisExercise(long id) throws BaseException {
+
+        String key = "exercise_" + id;
+        List<String> locList = redisService.getList(key, 0, -1);
+        return locList;
+    }
+
 }

@@ -61,4 +61,15 @@ public class LocationController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    @GetMapping("/redis-all")
+    public BaseResponse<List<String>> getAllRedisExercise(@RequestParam int id) throws BaseException {
+        try{
+            List<String> result = locationService.getAllRedisExercise(id);
+            return new BaseResponse<>(result);
+        }catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 }
