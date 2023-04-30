@@ -17,5 +17,5 @@ public class ExerciseEndReq {
 
     private String distance;
 
-    private LocalDateTime end;
+    private String end;
 }

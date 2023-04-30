@@ -11,7 +11,7 @@ public class ExerciseStartReq {
 
     private String type;
 
-    private LocalDateTime start;
+    private String start;
 
     private long goalId;
 }
