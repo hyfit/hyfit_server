@@ -38,8 +38,8 @@ public class GoalService {
         return goalResult.toDto();
     }
     public List<GoalDto> getAllGoal(String email) throws BaseException {
-        if(goalRepository.findAllByEmailAndGoalStatus(email,1).size() == 0){
-            throw new BaseException(NO_PROGRESS_GOAL);
+        if(goalRepository.findAllByEmail(email).size() == 0){
+            throw new BaseException(NO_GOAL_EXIST);
         }
         List<GoalDto> result = goalRepository.findAllByEmail(email).
                 stream().map(m -> m.toDto())
