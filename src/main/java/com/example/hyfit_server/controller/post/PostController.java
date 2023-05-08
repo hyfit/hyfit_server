@@ -6,7 +6,9 @@ import com.example.hyfit_server.dto.Post.*;
 import com.example.hyfit_server.service.image.S3Service;
 import com.example.hyfit_server.service.post.PostService;
 import com.example.hyfit_server.service.user.UserService;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,22 +24,20 @@ public class PostController {
 
     private final PostService postService;
     private final UserService userService;
-
     private final S3Service s3Service;
 
+
+
     @PostMapping("/save")
-    public BaseResponse<PostSaveResDto> savePost(HttpServletRequest request, @RequestPart(value = "file", required = false)MultipartFile file, @Valid @RequestPart(value = "dto") PostSaveDto postSaveDto, BindingResult bindingResult) throws Exception {
+    public BaseResponse<PostSaveRes> savePost(HttpServletRequest request, @RequestPart(value = "file")MultipartFile file,
+                                              @Valid @RequestPart(value = "dto") PostSaveDto postSaveDto, BindingResult bindingResult) throws Exception {
         try {
             String email = userService.getEmailFromToken(request);
             postSaveDto.setEmail(email);
-            PostSaveResDto result = new PostSaveResDto();
 
-            if(file == null) {
-                result = postService.savePost(postSaveDto, null,bindingResult);
-            } else {
-                String imageUrl = s3Service.uploadFile(file, "post/images");
-                result = postService.savePost(postSaveDto, imageUrl,bindingResult);
-            }
+            String imageUrl = s3Service.uploadFile(file, "post/images");
+
+            PostSaveRes result = postService.savePost(postSaveDto, imageUrl,bindingResult);
 
             return new BaseResponse<>(result);
         }
@@ -45,7 +45,6 @@ public class PostController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
 
     @GetMapping("/all")
     public BaseResponse<List<PostDto>> getAllPostsOfUser(@RequestParam String email) throws BaseException {
@@ -59,10 +58,10 @@ public class PostController {
     }
 
     @GetMapping("")
-    public BaseResponse<PostDto> getOnePost(@RequestParam long id, @RequestParam String email) throws BaseException{
+    public BaseResponse<GetOnePostRes> getOnePost(@RequestParam long id, @RequestParam String email) throws BaseException{
         try{
-            PostDto postDto = postService.getOnePost(email, id);
-            return new BaseResponse<>(postDto);
+            GetOnePostRes result = postService.getOnePost(email, id);
+            return new BaseResponse<>(result);
         }
         catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -95,7 +94,15 @@ public class PostController {
     }
 
 //    @GetMapping("/profile")
-//    public BaseResponse<>
+//    public BaseResponse<PostProfileRes> getProfileInfo(@RequestParam String email) throws BaseException {
+//        try {
+//            PostProfileRes result = postService.getProfileInfo(email);
+//            return new BaseResponse<>(result);
+//        }
+//        catch (BaseException exception) {
+//            return new BaseResponse<>((exception.getStatus()));
+//        }
+//    }
 
 
 

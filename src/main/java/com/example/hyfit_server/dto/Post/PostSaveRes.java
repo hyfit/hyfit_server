@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class PostSaveResDto {
+public class PostSaveRes {
     private PostDto postDto;
     private ImageDto imageDto;
 
     @Builder
-    public PostSaveResDto(PostDto postDto, ImageDto imageDto) {
+    public PostSaveRes(PostDto postDto, ImageDto imageDto) {
         this.postDto = postDto;
         this.imageDto = imageDto;
     }

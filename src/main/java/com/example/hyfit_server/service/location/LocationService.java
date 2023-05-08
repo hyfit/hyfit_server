@@ -5,6 +5,7 @@ import com.example.hyfit_server.domain.location.LocationEntity;
 import com.example.hyfit_server.domain.location.LocationRepository;
 import com.example.hyfit_server.dto.location.LocationDto;
 import com.example.hyfit_server.dto.location.LocationExerciseSaveReq;
+import com.example.hyfit_server.dto.location.LocationPostSaveReq;
 import com.example.hyfit_server.dto.location.LocationRedisReq;
 import com.example.hyfit_server.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +50,12 @@ public class LocationService {
         String key = "exercise_" + id;
         int len = redisService.getList(key,0,-1).size();
         return redisService.getIndexInList(key,len/2);
+
+    }
+
+    public LocationDto savePostLocation(LocationPostSaveReq locationReq) throws BaseException {
+        LocationEntity locationEntity = locationRepository.save(locationReq.toEntity());
+        return locationEntity.toDto();
 
     }
 }

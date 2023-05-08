@@ -5,6 +5,7 @@ import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.dto.location.LocationDto;
 import com.example.hyfit_server.dto.location.LocationExerciseSaveReq;
+import com.example.hyfit_server.dto.location.LocationPostSaveReq;
 import com.example.hyfit_server.dto.location.LocationRedisReq;
 import com.example.hyfit_server.service.location.LocationService;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +58,16 @@ public class LocationController {
             String result = locationService.getMiddleLoc(id);
             return new BaseResponse<>(result);
         }catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @PostMapping("/post")
+    public BaseResponse<LocationDto> savePostLocation(@RequestBody LocationPostSaveReq locationPostSaveReq) throws BaseException {
+        try {
+            LocationDto locationDto = locationService.savePostLocation(locationPostSaveReq);
+            return new BaseResponse<>(locationDto);
+        } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
     }

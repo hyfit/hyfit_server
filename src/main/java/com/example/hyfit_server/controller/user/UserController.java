@@ -5,12 +5,14 @@ import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.config.security.JwtTokenProvider;
 import com.example.hyfit_server.domain.user.UserRole;
 import com.example.hyfit_server.dto.user.*;
+import com.example.hyfit_server.service.image.S3Service;
 import com.example.hyfit_server.service.redis.RedisService;
 import com.example.hyfit_server.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -24,6 +26,7 @@ public class UserController {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final RedisService redisService;
+    private final S3Service s3Service;
 
     // 회원가입 controller
     @PostMapping("/join")
@@ -178,6 +181,26 @@ public class UserController {
     public BaseResponse<String> isValidUser(HttpServletRequest request) throws BaseException{
         try{
             String result = userService.isValidUser(request);
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @PostMapping("/profile-image")
+    public BaseResponse<UserDto> updateProfileImage(HttpServletRequest request,@RequestPart(value = "file")MultipartFile file) throws Exception {
+        try {
+            String email = userService.getEmailFromToken(request);
+            String imageUrl = s3Service.uploadFile(file, "user/profile");
+
+            UserProfileImageSaveDto userProfileImageSaveDto = UserProfileImageSaveDto.builder()
+                    .email(email)
+                    .imageUrl(imageUrl)
+                    .build();
+
+            UserDto result = userService.updateProfileImage(userProfileImageSaveDto);
+
             return new BaseResponse<>(result);
         }
         catch (BaseException exception) {

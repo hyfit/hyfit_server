@@ -2,13 +2,16 @@ package com.example.hyfit_server.service.user;
 
 import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.config.response.BaseResponse;
+import com.example.hyfit_server.config.s3.S3Config;
 import com.example.hyfit_server.config.security.JwtTokenProvider;
 import com.example.hyfit_server.domain.post.PostRepository;
 import com.example.hyfit_server.domain.user.FollowRepository;
 import com.example.hyfit_server.domain.user.UserEntity;
 import com.example.hyfit_server.domain.user.UserRepository;
 import com.example.hyfit_server.dto.user.*;
+import com.example.hyfit_server.service.image.S3Service;
 import com.example.hyfit_server.service.redis.RedisService;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
@@ -37,6 +40,7 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final RedisService redisService;
+    private final S3Service s3Service;
 
 
 
@@ -168,6 +172,18 @@ public class UserService {
             return "valid";
         }
 
+    }
+
+    public UserDto updateProfileImage(UserProfileImageSaveDto userProfileImageSaveDto) throws BaseException {
+        UserEntity userEntity = userRepository.findByEmail(userProfileImageSaveDto.getEmail());
+
+        if(userEntity.getProfile_img() != null) {
+            String oldProfile = userEntity.getProfile_img();
+            s3Service.deleteFile(oldProfile);
+        }
+        userEntity.updateProfileImage(userProfileImageSaveDto.getImageUrl());
+
+        return userEntity.toDto();
     }
 
 }
