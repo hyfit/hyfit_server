@@ -62,6 +62,29 @@ public class GoalController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    @GetMapping("/mountain")
+    public BaseResponse<List<GoalDto>> getAllMountainGoalProgress(HttpServletRequest request) throws BaseException {
+        try{
+            String userEmail = userService.getEmailFromToken(request);
+            List<GoalDto> result = goalService.getAllMountainGoalProgress(userEmail);
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    @GetMapping("/building")
+    public BaseResponse<List<GoalDto>> getAllBuildingGoalProgress(HttpServletRequest request) throws BaseException {
+        try{
+            String userEmail = userService.getEmailFromToken(request);
+            List<GoalDto> result = goalService.getAllBuildingGoalProgress(userEmail);
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 
     @GetMapping("/done")
     public BaseResponse<List<GoalDto>> getAllGoalDone(HttpServletRequest request) throws BaseException {

@@ -57,6 +57,30 @@ public class GoalService {
         Collections.reverse(result);
         return result;
     }
+    // get building
+    public List<GoalDto> getAllBuildingGoalProgress(String email) throws BaseException {
+        if(goalRepository.findAllByEmailAndGoalStatusAndType(email,1,"building").size() == 0){
+            throw new BaseException(NO_PROGRESS_GOAL);
+        }
+        List<GoalDto> result = goalRepository.findAllByEmailAndGoalStatusAndType(email,1,"building").
+                stream().map(m -> m.toDto())
+                .collect(Collectors.toList());
+        Collections.reverse(result);
+        return result;
+    }
+
+    // get mountain
+    public List<GoalDto> getAllMountainGoalProgress(String email) throws BaseException {
+        if(goalRepository.findAllByEmailAndGoalStatusAndType(email,1,"mountain").size() == 0){
+            throw new BaseException(NO_PROGRESS_GOAL);
+        }
+        List<GoalDto> result = goalRepository.findAllByEmailAndGoalStatusAndType(email,1,"mountain").
+                stream().map(m -> m.toDto())
+                .collect(Collectors.toList());
+        Collections.reverse(result);
+        return result;
+    }
+
 
     public List<GoalDto> getAllGoalDone(String email) throws BaseException {
         if(goalRepository.findAllByEmailAndGoalStatus(email,0).size() == 0){
