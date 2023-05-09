@@ -25,9 +25,10 @@ public class GoalDto {
 
     private String rate;
 
+    private String gain;
     private String description;
-
     private String createdAt;
+
 
 
 
@@ -41,13 +42,14 @@ public class GoalDto {
                 .goalStatus(goalStatus)
                 .rate(rate)
                 .description(description)
+                .gain(gain)
                 .build();
         return goalEntity;
     }
 
     @Builder
     public GoalDto(long goalId, String email, String place, String type, int goalStatus,
-                   String rate, String description,String createdAt){
+                   String rate, String description,String createdAt,String gain){
         this.goalId = goalId;
         this. email = email;
         this.place = place;
@@ -56,6 +58,7 @@ public class GoalDto {
         this.rate = rate;
         this.description = description;
         this.createdAt = createdAt;
+        this.gain = gain;
     }
 
 

@@ -26,20 +26,21 @@ public class LocationService {
     private final LocationRepository locationRepository;
     private final RedisService redisService;
 
+    // mysql 에 저장
     public LocationDto saveExercise(LocationExerciseSaveReq locationReq) throws BaseException {
        LocationEntity locationEntity = locationRepository.save(locationReq.toEntity());
        return locationEntity.toDto();
 
     }
 
+    // redis에 실외운동 저장
     public List<String> saveRedisExercise(LocationRedisReq locationReq) throws BaseException {
         String key = "exercise_" + locationReq.getId();
         String data = locationReq.getLatitude() + "," + locationReq.getLongitude() + "," + locationReq.getAltitude();
         redisService.addToList(key, data);
-        // Set expiration time
-//        redisService.setExpiration(key, Duration.ofDays(1));
         return redisService.getList(key,0,-1);
     }
+
 
     public List<String> getAllExerciseList(long id) throws BaseException {
         String key = "exercise_" + id;

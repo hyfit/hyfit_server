@@ -75,10 +75,10 @@ public class GoalController {
         }
     }
 
-    @PatchMapping("/rate")
-    public BaseResponse<GoalDto> modifyGoal(@RequestParam long id, String rate) throws BaseException {
+    @PatchMapping("")
+    public BaseResponse<GoalDto> modifyGoal(@RequestParam long id,String gain) throws BaseException {
         try{
-            GoalDto goalDto = goalService.modifyGoal(id,rate);
+            GoalDto goalDto = goalService.modifyGoal(id,gain);
             return new BaseResponse<>(goalDto);
         }
         catch (BaseException exception) {
