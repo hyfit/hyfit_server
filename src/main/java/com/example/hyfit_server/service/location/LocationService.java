@@ -3,10 +3,7 @@ package com.example.hyfit_server.service.location;
 import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.domain.location.LocationEntity;
 import com.example.hyfit_server.domain.location.LocationRepository;
-import com.example.hyfit_server.dto.location.LocationDto;
-import com.example.hyfit_server.dto.location.LocationExerciseSaveReq;
-import com.example.hyfit_server.dto.location.LocationRedisReq;
-import com.example.hyfit_server.dto.location.LocationRedisRes;
+import com.example.hyfit_server.dto.location.*;
 import com.example.hyfit_server.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +34,14 @@ public class LocationService {
     public List<String> saveRedisExercise(LocationRedisReq locationReq) throws BaseException {
         String key = "exercise_" + locationReq.getId();
         String data = locationReq.getLatitude() + "," + locationReq.getLongitude() + "," + locationReq.getAltitude();
+        redisService.addToList(key, data);
+        return redisService.getList(key,0,-1);
+    }
+
+    // redis에 고도 운동 저장
+    public List<String> saveRedisAltExercise(LocationAltRedisReq locationAltRedisReq) throws BaseException {
+        String key = "exercise_" + locationAltRedisReq.getId();
+        String data = locationAltRedisReq.getLatitude() + "," + locationAltRedisReq.getLongitude() + "," + locationAltRedisReq.getAltitude() + locationAltRedisReq.getIncrease();
         redisService.addToList(key, data);
         return redisService.getList(key,0,-1);
     }
