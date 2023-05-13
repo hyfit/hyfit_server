@@ -41,7 +41,7 @@ public class LocationService {
     // redis에 고도 운동 저장
     public List<String> saveRedisAltExercise(LocationAltRedisReq locationAltRedisReq) throws BaseException {
         String key = "exercise_" + locationAltRedisReq.getId();
-        String data = locationAltRedisReq.getLatitude() + "," + locationAltRedisReq.getLongitude() + "," + locationAltRedisReq.getAltitude() + locationAltRedisReq.getIncrease();
+        String data = locationAltRedisReq.getLatitude() + "," + locationAltRedisReq.getLongitude() + "," + locationAltRedisReq.getAltitude() +  "," + locationAltRedisReq.getIncrease();
         redisService.addToList(key, data);
         return redisService.getList(key,0,-1);
     }
