@@ -32,6 +32,7 @@ public enum BaseResponseStatus {
     EXIST_GOAL_MOUNTAIN(false, 2201, "이미 설정한 목표가 진행중입니다."),
     NO_PROGRESS_GOAL(false, 2202, "진행중인 목표가 없습니다."),
     NO_PROGRESS_DONE(false, 2203, "종료된 목표가 없습니다."),
+    NO_GOAL_EXIST(false,2204,"아무 목표도 존재하지않습니다."),
 
     // post 관련
 

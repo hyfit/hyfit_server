@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @Transactional
 @Service
@@ -23,7 +25,7 @@ public class ExerciseService {
         ExerciseEntity exerciseEntity = ExerciseEntity.builder().
                 email(userEmail).
                 type(exerciseStartReq.getType()).
-                start(exerciseStartReq.getStart()).
+                start(LocalDateTime.parse(exerciseStartReq.getStart())).
                 goalId(exerciseStartReq.getGoalId()).
                 build();
         exerciseRepository.save(exerciseEntity);
