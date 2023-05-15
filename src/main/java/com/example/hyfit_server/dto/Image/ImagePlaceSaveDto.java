@@ -7,11 +7,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class ImageDto {
-
-    private long imageId;
-
-    private long postId;
+public class ImagePlaceSaveDto {
 
     private long placeId;
 
@@ -19,7 +15,6 @@ public class ImageDto {
 
     public ImageEntity toEntity() {
         ImageEntity imageEntity = ImageEntity.builder()
-                .postId(postId)
                 .placeId(placeId)
                 .imageUrl(imageUrl)
                 .build();
@@ -27,11 +22,8 @@ public class ImageDto {
     }
 
     @Builder
-    public ImageDto(long imageId, long postId, long placeId,String imageUrl){
-        this.imageId = imageId;
-        this.postId = postId;
+    public ImagePlaceSaveDto(long placeId, String imageUrl) {
         this.placeId = placeId;
         this.imageUrl = imageUrl;
     }
-
 }

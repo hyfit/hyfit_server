@@ -12,5 +12,7 @@ public interface PostRepository extends JpaRepository<PostEntity,Long>{
 
     PostEntity findByPostId(long postId);
 
+    Long countDistinctByEmail(String email);    // 사용자의 post 개수
+
     void deleteAllByEmail(String email);
 }
