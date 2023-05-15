@@ -5,6 +5,7 @@ import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.dto.location.LocationDto;
 import com.example.hyfit_server.dto.location.LocationExerciseSaveReq;
+import com.example.hyfit_server.dto.location.LocationPostSaveReq;
 import com.example.hyfit_server.dto.location.LocationRedisReq;
 import com.example.hyfit_server.dto.location.LocationRedisRes;
 import com.example.hyfit_server.service.location.LocationService;

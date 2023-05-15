@@ -14,5 +14,8 @@ public interface FollowRepository extends JpaRepository<FollowEntity,Long> {
     void deleteAllByFollowerEmail(String followerEmail);
     void deleteAllByFollowingEmail(String followingEmail);
 
+    Long countByFollowingEmail(String followingEmail);  // 사용자의 follower 수
+    Long countByFollowerEmail(String followerEmail);    // 사용자의 following 수
+
     void deleteByFollowerEmailAndFollowingEmail(String followerEmail, String followingEmail);
 }

@@ -1,5 +1,6 @@
-package com.example.hyfit_server.domain.post;
+package com.example.hyfit_server.domain.image;
 
+import com.example.hyfit_server.domain.user.UserEntity;
 import com.example.hyfit_server.dto.Image.ImageDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,23 +18,34 @@ public class ImageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long imageId;
 
+    @Column(nullable = true)
     private long postId;
 
+    @Column(nullable = true)
+    private long placeId;
+
     @Column(nullable = false)
-    private String fileName;
+    private String imageUrl;
 
     @Builder
-    public ImageEntity(long imageId, long postId, String fileName){
+    public ImageEntity(long imageId, long postId, long placeId,String imageUrl){
         this.imageId = imageId;
         this.postId = postId;
-        this.fileName = fileName;
+        this.placeId = placeId;
+        this.imageUrl = imageUrl;
     }
 
     public ImageDto toDto() {
         return ImageDto.builder()
                 .imageId(imageId)
                 .postId(postId)
-                .fileName(fileName)
+                .placeId(placeId)
+                .imageUrl(imageUrl)
                 .build();
+    }
+
+    public ImageEntity updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+        return this;
     }
 }

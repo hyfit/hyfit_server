@@ -5,6 +5,7 @@ import com.example.hyfit_server.domain.location.LocationEntity;
 import com.example.hyfit_server.domain.location.LocationRepository;
 import com.example.hyfit_server.dto.location.LocationDto;
 import com.example.hyfit_server.dto.location.LocationExerciseSaveReq;
+import com.example.hyfit_server.dto.location.LocationPostSaveReq;
 import com.example.hyfit_server.dto.location.LocationRedisReq;
 import com.example.hyfit_server.dto.location.LocationRedisRes;
 import com.example.hyfit_server.service.redis.RedisService;

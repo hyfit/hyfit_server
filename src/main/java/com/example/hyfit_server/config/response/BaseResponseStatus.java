@@ -36,11 +36,13 @@ public enum BaseResponseStatus {
 
     // post 관련
 
-    NO_POST_TITLE(false, 2301, "제목을 입력해주세요."),
-    NO_SAVED_POST(false, 2302, "작성된 게시물이 없습니다."),
+    NO_POST_CONTENTS(false, 2301, "내용을 입력해주세요."),
+    NO_POST_ERROR(false, 2302, "해당 게시물이 없습니다."),
 
     // image 관련
-
+    NOT_SUPPORTED_IMAGE_FORMAT(false, 2401, "지원되는 파일 형식이 아닙니다."),
+    FAIL_TO_UPLOAD_IMAGE(false, 2402, "파일 업로드에 실패하였습니다."),
+    NO_IMAGE_ERROR(false, 2403, "해당 이미지가 없습니다."),
 
 
     /**

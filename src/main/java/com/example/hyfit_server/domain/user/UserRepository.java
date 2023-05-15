@@ -10,5 +10,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     UserEntity findByNickName(String nickName);
 
+//    UserInfoMapping findInfoByEmail(String email);
+
 
 }
+
+
