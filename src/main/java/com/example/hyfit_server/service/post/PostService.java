@@ -98,9 +98,9 @@ public class PostService {
         }
 
         String imgUrl = imageRepository.findByPostId(id).getImageUrl();
-        // s3 이미지 삭제
+        // s3 이미지 파일 삭제
         s3Service.deleteFile(imgUrl);
-        // image 삭제
+        // image 데이터 삭제
         imageRepository.deleteByPostId(id);
 
         postRepository.delete(postEntity);
