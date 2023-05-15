@@ -9,12 +9,10 @@ import com.example.hyfit_server.dto.location.LocationDto;
 import com.example.hyfit_server.service.exercise.ExerciseService;
 import com.example.hyfit_server.service.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/exercise")
@@ -41,6 +39,17 @@ public class ExerciseController {
     public BaseResponse<ExerciseDto> exerciseEnd(@RequestBody ExerciseEndReq exerciseEndReq) throws BaseException{
         try{
             ExerciseDto exerciseDto = exerciseService.exerciseEnd(exerciseEndReq);
+            return new BaseResponse<>(exerciseDto);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @GetMapping("/goal")
+    public BaseResponse<List<ExerciseDto>> exerciseByGoal(@RequestParam Long goalId) throws BaseException{
+        try{
+            List<ExerciseDto> exerciseDto = exerciseService.exerciseByGoal(goalId);
             return new BaseResponse<>(exerciseDto);
         }
         catch (BaseException exception) {

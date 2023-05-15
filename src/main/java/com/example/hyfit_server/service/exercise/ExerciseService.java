@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Transactional
@@ -38,6 +40,14 @@ public class ExerciseService {
         exerciseEntity.exerciseEnd(exerciseEndReq);
 
         return exerciseEntity.toDto();
+
+    }
+
+    public List<ExerciseDto> exerciseByGoal(long goalId)  throws BaseException{
+        List<ExerciseDto> result = exerciseRepository.findAllByGoalId(goalId).stream()
+                .map(m -> m.toDto())
+                .collect(Collectors.toList());
+        return result;
 
     }
 

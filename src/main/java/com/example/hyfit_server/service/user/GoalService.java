@@ -1,6 +1,7 @@
 package com.example.hyfit_server.service.user;
 
 import com.example.hyfit_server.config.response.BaseException;
+import com.example.hyfit_server.domain.place.PlaceEntity;
 import com.example.hyfit_server.domain.place.PlaceRepository;
 import com.example.hyfit_server.domain.user.GoalEntity;
 import com.example.hyfit_server.domain.user.GoalRepository;
@@ -56,6 +57,30 @@ public class GoalService {
         Collections.reverse(result);
         return result;
     }
+    // get building
+    public List<GoalDto> getAllBuildingGoalProgress(String email) throws BaseException {
+        if(goalRepository.findAllByEmailAndGoalStatusAndType(email,1,"building").size() == 0){
+            throw new BaseException(NO_PROGRESS_GOAL);
+        }
+        List<GoalDto> result = goalRepository.findAllByEmailAndGoalStatusAndType(email,1,"building").
+                stream().map(m -> m.toDto())
+                .collect(Collectors.toList());
+        Collections.reverse(result);
+        return result;
+    }
+
+    // get mountain
+    public List<GoalDto> getAllMountainGoalProgress(String email) throws BaseException {
+        if(goalRepository.findAllByEmailAndGoalStatusAndType(email,1,"mountain").size() == 0){
+            throw new BaseException(NO_PROGRESS_GOAL);
+        }
+        List<GoalDto> result = goalRepository.findAllByEmailAndGoalStatusAndType(email,1,"mountain").
+                stream().map(m -> m.toDto())
+                .collect(Collectors.toList());
+        Collections.reverse(result);
+        return result;
+    }
+
 
     public List<GoalDto> getAllGoalDone(String email) throws BaseException {
         if(goalRepository.findAllByEmailAndGoalStatus(email,0).size() == 0){
@@ -69,14 +94,21 @@ public class GoalService {
     }
 
 
-    public GoalDto modifyGoal(long id, String rate) throws BaseException{
+    public GoalDto modifyGoal(long id,String gain) throws BaseException{
         GoalEntity goalEntity = goalRepository.findByGoalId(id);
-        if(Long.parseLong(rate) == 100) { // 달성 완료
-            goalEntity = goalEntity.modify(rate,0);
+        PlaceEntity placeEntity = placeRepository.findByName(goalEntity.getPlace());
+        Double prevGain = 0.0;
+        if(goalEntity.getGain() == null){
+            prevGain = 0.0;
         }
-        else goalEntity = goalEntity.modify(rate,1);
-
-        goalRepository.save(goalEntity);
+        else Double.parseDouble(goalEntity.getGain());
+        Double totalGain = Double.parseDouble(gain) + prevGain;
+        String totalRate = String.format("%.2f",((totalGain / Double.parseDouble(placeEntity.getAltitude())))*100);
+        if(Double.parseDouble(totalRate) >= 100) { // 달성 완료
+            goalEntity = goalEntity.modify(totalRate,0, String.format("%.2f",totalGain));
+        }
+        else goalEntity = goalEntity.modify(totalRate,1, String.format("%.2f",totalGain));
+        goalEntity = goalRepository.save(goalEntity);
         return goalEntity.toDto();
     }
 
