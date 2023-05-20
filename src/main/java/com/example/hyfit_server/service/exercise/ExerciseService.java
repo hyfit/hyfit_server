@@ -2,6 +2,7 @@ package com.example.hyfit_server.service.exercise;
 
 
 import com.example.hyfit_server.config.response.BaseException;
+import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.domain.exercise.ExerciseEntity;
 import com.example.hyfit_server.domain.exercise.ExerciseRepository;
 import com.example.hyfit_server.dto.exercise.ExerciseDto;
@@ -47,6 +48,12 @@ public class ExerciseService {
         List<ExerciseDto> result = exerciseRepository.findAllByGoalId(goalId).stream()
                 .map(m -> m.toDto())
                 .collect(Collectors.toList());
+        return result;
+
+    }
+
+    public ExerciseDto getExercise(long exerciseId) throws BaseException{
+        ExerciseDto result = exerciseRepository.findByExerciseId(exerciseId).toDto();
         return result;
 
     }
