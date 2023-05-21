@@ -6,9 +6,10 @@ import com.example.hyfit_server.dto.Post.*;
 import com.example.hyfit_server.service.image.S3Service;
 import com.example.hyfit_server.service.post.PostService;
 import com.example.hyfit_server.service.user.UserService;
-import com.fasterxml.jackson.databind.ser.Serializers;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+
+import org.springframework.data.domain.Slice;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,8 +58,34 @@ public class PostController {
         }
     }
 
-    @GetMapping("")
-    public BaseResponse<GetOnePostRes> getOnePost(@RequestParam long id, @RequestParam String email) throws BaseException{
+    @GetMapping("/following-posts")
+    public BaseResponse<Slice<PostPaginationDto>> getAllPostsOfFollowingUsersWithType(HttpServletRequest request, @RequestBody PostPageReq postPageReq) throws BaseException {
+        try {
+            String email = userService.getEmailFromToken(request);
+
+            Slice<PostPaginationDto> result = postService.getAllPostsOfFollowingUsersWithType(email, postPageReq);
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @GetMapping("/all-users-post")
+    public BaseResponse<Slice<PostPaginationDto>> getAllPostsOfAllUsersWithType(HttpServletRequest request, @RequestBody PostPageReq postPageReq) throws BaseException {
+        try {
+            String email = userService.getEmailFromToken(request);
+
+            Slice<PostPaginationDto> result = postService.getAllPostsOfAllUsersWithType(email, postPageReq);
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @GetMapping("/{id}")
+    public BaseResponse<GetOnePostRes> getOnePost(@PathVariable("id")long id, @RequestParam String email) throws BaseException{
         try{
             GetOnePostRes result = postService.getOnePost(email, id);
             return new BaseResponse<>(result);
@@ -68,12 +95,53 @@ public class PostController {
         }
     }
 
-    @PatchMapping("/{id}")
-    public BaseResponse<PostDto> modifyPost(HttpServletRequest request, @PathVariable("id")long id,@RequestBody PostModifyDto postModifyDto) throws BaseException {
+    @PatchMapping("/{id}/modify")
+    public BaseResponse<PostDto> modifyPost(HttpServletRequest request, @PathVariable("id")long id,@RequestParam String content) throws BaseException {
         try{
             String email = userService.getEmailFromToken(request);
-            PostDto postDto = postService.modifyPost(email, id, postModifyDto);
+            PostModifyDto postModifyDto = PostModifyDto.builder()
+                    .postId(id)
+                    .email(email)
+                    .content(content)
+                    .build();
+
+            PostDto postDto = postService.modifyPost(postModifyDto);
             return new BaseResponse<>(postDto);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @PostMapping("/{id}/like")
+    public BaseResponse<PostLikeDto> likePost(HttpServletRequest request, @PathVariable("id")long id) throws BaseException {
+        try {
+            String email = userService.getEmailFromToken(request);
+            PostLikeReq postLikeReq = PostLikeReq.builder()
+                    .postId(id)
+                    .email(email)
+                    .build();
+
+            PostLikeDto result = postService.likePost(postLikeReq);
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @DeleteMapping("/{id}/unlike")
+    BaseResponse<String> unlikePost(HttpServletRequest request, @PathVariable("id")long id) throws BaseException {
+        try{
+            String email = userService.getEmailFromToken(request);
+            PostLikeReq postLikeReq = PostLikeReq.builder()
+                    .postId(id)
+                    .email(email)
+                    .build();
+
+            postService.unlikePost(postLikeReq);
+            String result = "게시물 좋아요 취소 완료";
+            return new BaseResponse<>(result);
         }
         catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -93,21 +161,14 @@ public class PostController {
         }
     }
 
-//    @GetMapping("/profile")
-//    public BaseResponse<PostProfileRes> getProfileInfo(@RequestParam String email) throws BaseException {
-//        try {
-//            PostProfileRes result = postService.getProfileInfo(email);
-//            return new BaseResponse<>(result);
-//        }
-//        catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
-
-
-
-
-
-
-
+    @GetMapping("/profile")
+    public BaseResponse<PostProfileRes> getCommunityProfileInfo(@RequestParam String email) throws BaseException {
+        try {
+            PostProfileRes result = postService.getProfileInfo(email);
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }

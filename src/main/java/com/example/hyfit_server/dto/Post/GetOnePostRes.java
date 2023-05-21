@@ -12,11 +12,15 @@ public class GetOnePostRes {
     private PostDto postDto;
     private String imageUrl;
     private UserProfileDto userProfileDto;
+    private long postLikeNumber;
+    private String type;
 
     @Builder
-    public GetOnePostRes(PostDto postDto, String imageUrl, UserProfileDto userProfileDto) {
+    public GetOnePostRes(PostDto postDto, String imageUrl, UserProfileDto userProfileDto, long postLikeNumber, String type) {
         this.postDto = postDto;
         this.imageUrl = imageUrl;
         this.userProfileDto = userProfileDto;
+        this.postLikeNumber = postLikeNumber;
+        this.type = type;
     }
 }
