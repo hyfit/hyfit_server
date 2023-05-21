@@ -2,6 +2,7 @@ package com.example.hyfit_server.domain.place;
 
 import com.example.hyfit_server.dto.Goal.GoalDto;
 import com.example.hyfit_server.dto.Goal.PlaceDto;
+import com.example.hyfit_server.dto.Goal.PlaceImageDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,6 +37,18 @@ public class PlaceEntity {
                 .continents(continents)
                 .altitude(altitude)
                 .location(location)
+                .build();
+    }
+
+    public PlaceImageDto toImageDto(){
+        return  PlaceImageDto.builder().
+                placeId(placeId)
+                .name(name)
+                .type(type)
+                .continents(continents)
+                .altitude(altitude)
+                .location(location)
+                .src("")
                 .build();
     }
 }

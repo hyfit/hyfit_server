@@ -5,10 +5,7 @@ import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.config.security.JwtTokenProvider;
 import com.example.hyfit_server.domain.user.GoalEntity;
 import com.example.hyfit_server.domain.user.GoalRepository;
-import com.example.hyfit_server.dto.Goal.GoalAddDto;
-import com.example.hyfit_server.dto.Goal.GoalDto;
-import com.example.hyfit_server.dto.Goal.PlaceDto;
-import com.example.hyfit_server.dto.Goal.PlaceReq;
+import com.example.hyfit_server.dto.Goal.*;
 import com.example.hyfit_server.service.user.GoalService;
 import com.example.hyfit_server.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -163,10 +160,10 @@ public class GoalController {
     }
 
     @GetMapping("/place-rec")
-    public BaseResponse<List<PlaceDto>> getPlaceRec(HttpServletRequest request)  throws BaseException {
+    public BaseResponse<List<PlaceImageDto>> getPlaceRec(HttpServletRequest request)  throws BaseException {
         try{
             String userEmail = userService.getEmailFromToken(request);
-            List<PlaceDto> result = goalService.getPlaceRec(userEmail);
+            List<PlaceImageDto> result = goalService.getPlaceRec(userEmail);
             Collections.shuffle(result);
             return  new BaseResponse<>(result.subList(0, 5));
         }
