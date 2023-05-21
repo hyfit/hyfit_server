@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -155,6 +156,19 @@ public class GoalController {
                 return  new BaseResponse<>(result.size()/5);
             }
             else return  new BaseResponse<>(result.size()/5+1);
+        }
+        catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @GetMapping("/place-rec")
+    public BaseResponse<List<PlaceDto>> getPlaceRec(HttpServletRequest request)  throws BaseException {
+        try{
+            String userEmail = userService.getEmailFromToken(request);
+            List<PlaceDto> result = goalService.getPlaceRec(userEmail);
+            Collections.shuffle(result);
+            return  new BaseResponse<>(result);
         }
         catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

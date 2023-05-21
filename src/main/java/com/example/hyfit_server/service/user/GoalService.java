@@ -1,6 +1,7 @@
 package com.example.hyfit_server.service.user;
 
 import com.example.hyfit_server.config.response.BaseException;
+import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.domain.place.PlaceEntity;
 import com.example.hyfit_server.domain.place.PlaceRepository;
 import com.example.hyfit_server.domain.user.GoalEntity;
@@ -11,9 +12,12 @@ import com.example.hyfit_server.dto.Goal.PlaceDto;
 import com.example.hyfit_server.dto.Goal.PlaceReq;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -131,6 +135,21 @@ public class GoalService {
                 .collect(Collectors.toList());
         List<PlaceDto> pageList = new ArrayList<>(result.subList((page-1)*pageSize, Math.min(page*pageSize, result.size())));
         return pageList;
+    }
+
+    public List<PlaceDto> getPlaceRec(String email)throws BaseException{
+        List<GoalDto> goalList = getAllGoalProgress(email);
+        List<String> nameList = goalList.stream().map(m -> m.getPlace()).collect(Collectors.toList());
+        Specification<PlaceEntity> spec = (root, query, criteriaBuilder) -> {
+            Predicate namePredicate = criteriaBuilder.not(root.get("name").in(nameList));
+            return namePredicate;
+        };
+        List<PlaceDto> result = placeRepository.findAll(spec)
+                .stream()
+                .map(m -> m.toDto())
+                .collect(Collectors.toList());
+
+        return result;
     }
 
 
