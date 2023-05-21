@@ -5,16 +5,14 @@ import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.config.security.JwtTokenProvider;
 import com.example.hyfit_server.domain.user.GoalEntity;
 import com.example.hyfit_server.domain.user.GoalRepository;
-import com.example.hyfit_server.dto.Goal.GoalAddDto;
-import com.example.hyfit_server.dto.Goal.GoalDto;
-import com.example.hyfit_server.dto.Goal.PlaceDto;
-import com.example.hyfit_server.dto.Goal.PlaceReq;
+import com.example.hyfit_server.dto.Goal.*;
 import com.example.hyfit_server.service.user.GoalService;
 import com.example.hyfit_server.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -155,6 +153,19 @@ public class GoalController {
                 return  new BaseResponse<>(result.size()/5);
             }
             else return  new BaseResponse<>(result.size()/5+1);
+        }
+        catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @GetMapping("/place-rec")
+    public BaseResponse<List<PlaceImageDto>> getPlaceRec(HttpServletRequest request)  throws BaseException {
+        try{
+            String userEmail = userService.getEmailFromToken(request);
+            List<PlaceImageDto> result = goalService.getPlaceRec(userEmail);
+            Collections.shuffle(result);
+            return  new BaseResponse<>(result.subList(0, 5));
         }
         catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

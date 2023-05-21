@@ -57,4 +57,15 @@ public class ExerciseController {
         }
     }
 
+    @GetMapping("")
+    public  BaseResponse<ExerciseDto> getExercise(@RequestParam long exerciseId) throws BaseException{
+        try{
+            ExerciseDto result = exerciseService.getExercise(exerciseId);
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 }
