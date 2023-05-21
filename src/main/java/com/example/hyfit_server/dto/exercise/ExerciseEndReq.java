@@ -17,5 +17,7 @@ public class ExerciseEndReq {
 
     private String distance;
 
+    private String increase;
+
     private String end;
 }
