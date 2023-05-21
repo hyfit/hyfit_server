@@ -168,7 +168,7 @@ public class GoalController {
             String userEmail = userService.getEmailFromToken(request);
             List<PlaceDto> result = goalService.getPlaceRec(userEmail);
             Collections.shuffle(result);
-            return  new BaseResponse<>(result);
+            return  new BaseResponse<>(result.subList(0, 5));
         }
         catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
