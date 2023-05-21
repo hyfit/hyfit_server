@@ -19,5 +19,7 @@ public class ExerciseEndReq {
 
     private String increase;
 
+    private String peakAlt;
+
     private String end;
 }

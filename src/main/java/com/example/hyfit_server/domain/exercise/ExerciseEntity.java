@@ -39,9 +39,11 @@ public class ExerciseEntity extends BaseTimeEntity  {
 
     @Column(nullable = true)
     private String increase;
+    @Column(nullable = true)
+    private String peakAlt;
 
     @Builder
-    public ExerciseEntity(long exerciseId, long goalId, String email, String type, String pace,String distance, LocalDateTime start, LocalDateTime end, long totalTime, String increase){
+    public ExerciseEntity(long exerciseId, long goalId, String email, String type, String pace,String distance, LocalDateTime start, LocalDateTime end, long totalTime, String increase,String peakAlt){
         this.exerciseId = exerciseId;
         this.goalId = goalId;
         this.email = email;
@@ -52,6 +54,7 @@ public class ExerciseEntity extends BaseTimeEntity  {
         this.end = end;
         this.totalTime = totalTime;
         this.increase = increase;
+        this.peakAlt = peakAlt;
     }
 
     public ExerciseDto toDto(){
@@ -65,6 +68,8 @@ public class ExerciseEntity extends BaseTimeEntity  {
                 .end(end != null ? end.toString() : "null")
                 .totalTime(totalTime)
                 .distance(distance)
+                .increase(increase)
+                .peakAlt(peakAlt)
                 .build();
 
     }
@@ -76,6 +81,7 @@ public class ExerciseEntity extends BaseTimeEntity  {
         this.end = LocalDateTime.parse(exerciseEndReq.getEnd());
         this.distance = exerciseEndReq.getDistance();
         this.increase = exerciseEndReq.getIncrease();
+        this.peakAlt = exerciseEndReq.getPeakAlt();
         return this;
     }
 
