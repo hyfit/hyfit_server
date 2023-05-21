@@ -20,7 +20,6 @@ public class PostEntity extends BaseTimeEntity {
 
     private String email;
 
-
     private long exercise_data_id;
 
     @Column(nullable = false)
@@ -28,7 +27,7 @@ public class PostEntity extends BaseTimeEntity {
 
 
     @Builder
-    public PostEntity(long postId, String email, long exercise_data_id,String title, String content){
+    public PostEntity(long postId, String email, long exercise_data_id, String content){
         this.postId = postId;
         this.email = email;
         this.exercise_data_id = exercise_data_id;
@@ -44,7 +43,8 @@ public class PostEntity extends BaseTimeEntity {
                 .build();
     }
 
-    public void modifyContent(String content) {
+    public PostEntity modifyContent(String content) {
         this.content = content;
+        return this;
     }
 }

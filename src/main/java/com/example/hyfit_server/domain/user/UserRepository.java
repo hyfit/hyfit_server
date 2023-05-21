@@ -2,7 +2,9 @@ package com.example.hyfit_server.domain.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+import java.util.List;
+
+public interface UserRepository extends JpaRepository<UserEntity, Long>, UserCustomRepository {
 
     UserEntity findByEmail(String email);
 
@@ -10,7 +12,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     UserEntity findByNickName(String nickName);
 
-//    UserInfoMapping findInfoByEmail(String email);
+
 
 
 }
