@@ -38,7 +38,7 @@ public class FollowService {
 
     public List<String> getFollower(String userEmail) throws  BaseException{
         List<String> result = followRepository.findAllByFollowingEmail(userEmail).stream()
-                .map(m -> m.getFollowerEmail())
+                .map(m -> m.getFollowerEmail()+ "," + userRepository.findByEmail(m.getFollowerEmail()).getNickName())
                 .collect(Collectors.toList());
         return result;
     }
@@ -46,7 +46,7 @@ public class FollowService {
 
     public List<String> getFollowing(String userEmail) throws  BaseException{
         List<String> result = followRepository.findAllByFollowerEmail(userEmail).stream()
-                .map(m -> m.getFollowingEmail())
+                .map(m -> m.getFollowingEmail() + "," + userRepository.findByEmail(m.getFollowingEmail()).getNickName())
                 .collect(Collectors.toList());
         return result;
 
