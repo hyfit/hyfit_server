@@ -4,6 +4,9 @@ import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.config.s3.S3Config;
 import com.example.hyfit_server.config.security.JwtTokenProvider;
+import com.example.hyfit_server.domain.post.PostCommentEntity;
+import com.example.hyfit_server.domain.post.PostCommentRepository;
+import com.example.hyfit_server.domain.post.PostLikeRepository;
 import com.example.hyfit_server.domain.post.PostRepository;
 import com.example.hyfit_server.domain.user.FollowRepository;
 import com.example.hyfit_server.domain.user.UserEntity;
@@ -37,10 +40,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final FollowRepository followRepository;
     private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final PostCommentRepository postCommentRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     private final RedisService redisService;
     private final S3Service s3Service;
+
 
 
 
@@ -130,6 +136,10 @@ public class UserService {
 
         // 게시물 삭제
         postRepository.deleteAllByEmail(userEmail);
+
+        // 게시물 좋아요, 댓글 삭제
+        postCommentRepository.deleteAllByEmail(userEmail);
+        postLikeRepository.deleteAllByEmail(userEmail);
 
         userRepository.delete(userEntity);
 

@@ -9,8 +9,6 @@ import org.apache.catalina.User;
 @NoArgsConstructor
 @Data
 public class PostProfileRes {
-    private String email;
-
     private UserProfileDto userProfileDto;
 
     private long postNum;
@@ -20,8 +18,7 @@ public class PostProfileRes {
     private long followerNum;
 
     @Builder
-    public PostProfileRes(String email, UserProfileDto userProfileDto, long postNum, long followingNum, long followerNum) {
-        this.email = email;
+    public PostProfileRes( UserProfileDto userProfileDto, long postNum, long followingNum, long followerNum) {
         this.userProfileDto = userProfileDto;
         this.postNum = postNum;
         this.followingNum = followingNum;
