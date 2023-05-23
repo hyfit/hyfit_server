@@ -25,13 +25,11 @@ public class FollowController {
 
     // 해당 유저를 팔로잉 해주는 유저 list (해당 유저의 팔로워)
     @GetMapping("/follower")
-    public BaseResponse<Map<String,List<String>>> getFollower(HttpServletRequest request) throws BaseException{
+    public BaseResponse<List<String>> getFollower(HttpServletRequest request) throws BaseException{
         try{
             String userEmail = userService.getEmailFromToken(request);
-            Map<String, List<String>> result = new HashMap<String, List<String>>();
             List<String> followerList = followService.getFollower(userEmail);
-            result.put(userEmail,followerList);
-            return new BaseResponse<>(result);
+            return new BaseResponse<>(followerList);
         }
         catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -41,14 +39,11 @@ public class FollowController {
 
     // 해당 유저가 팔로잉하는 유저 list (해당 유저의 팔로잉)
     @GetMapping("/following")
-    public BaseResponse<Map<String,List<String>>> getFollowing(HttpServletRequest request) throws BaseException{
+    public BaseResponse<List<String>> getFollowing(HttpServletRequest request) throws BaseException{
         try{
             String userEmail = userService.getEmailFromToken(request);
-            Map<String, List<String>> result = new HashMap<String, List<String>>();
             List<String> followingList = followService.getFollowing(userEmail);
-            result.put(userEmail, followingList);
-            System.out.println(result.getClass().getName());
-            return new BaseResponse<>(result);
+            return new BaseResponse<>(followingList);
         }
         catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
