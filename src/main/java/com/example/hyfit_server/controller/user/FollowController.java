@@ -53,9 +53,8 @@ public class FollowController {
         catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
-
-
     }
+
 
     @PostMapping("/add")
     public BaseResponse<String> addFollow(HttpServletRequest request, @RequestParam String email) throws BaseException {

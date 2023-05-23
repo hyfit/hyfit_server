@@ -57,7 +57,8 @@ public class GoalService {
     }
     public List<GoalDto> getAllGoalProgress(String email) throws BaseException {
         if(goalRepository.findAllByEmailAndGoalStatus(email,1).size() == 0){
-            throw new BaseException(NO_PROGRESS_GOAL);
+            List<GoalDto> goalList = new ArrayList<>();
+            return goalList;
         }
         List<GoalDto> result = goalRepository.findAllByEmailAndGoalStatus(email,1).
                 stream().map(m -> m.toDto())
@@ -143,27 +144,43 @@ public class GoalService {
 
     public List<PlaceImageDto> getPlaceRec(String email)throws BaseException{
         List<GoalDto> goalList = getAllGoalProgress(email);
-        List<String> nameList = goalList.stream().map(m -> m.getPlace()).collect(Collectors.toList());
-        Specification<PlaceEntity> spec = (root, query, criteriaBuilder) -> {
-            Predicate namePredicate = criteriaBuilder.not(root.get("name").in(nameList));
-            return namePredicate;
-        };
+        // goalList가 빈리스트일때 (현재 진행중인 목표가 없을때)
+        if(goalList.isEmpty()){
+            List<PlaceImageDto> result = new ArrayList<>();
+            placeRepository.findAll()
+                    .forEach(entity -> {
+                        PlaceImageDto dto = entity.toImageDto();
+                        try{
+                            dto.setSrc(cloudfrontUrl + imageService.getImageUrl(dto.getPlaceId()).getImageUrl());
+                        } catch (BaseException e) {
+                            throw new RuntimeException(e);
+                        }
+                        result.add(dto);
+                    });
+            return result;
+        }
+        else {
+            List<String> nameList = goalList.stream().map(m -> m.getPlace()).collect(Collectors.toList());
+            Specification<PlaceEntity> spec = (root, query, criteriaBuilder) -> {
+                Predicate namePredicate = criteriaBuilder.not(root.get("name").in(nameList));
+                return namePredicate;
+            };
 
-        List<PlaceImageDto> result = new ArrayList<>();
+            List<PlaceImageDto> result = new ArrayList<>();
 
-        placeRepository.findAll(spec)
-                .forEach(entity -> {
-                    PlaceImageDto dto = entity.toImageDto();
-                    // 요소를 추가하고 추가 작업 수행
-                    try {
-                        dto.setSrc(cloudfrontUrl + imageService.getImageUrl(dto.getPlaceId()).getImageUrl());
-                    } catch (BaseException e) {
-                        throw new RuntimeException(e);
-                    }
-                    result.add(dto);
-                });
-
-        return result;
+            placeRepository.findAll(spec)
+                    .forEach(entity -> {
+                        PlaceImageDto dto = entity.toImageDto();
+                        // 요소를 추가하고 추가 작업 수행
+                        try {
+                            dto.setSrc(cloudfrontUrl + imageService.getImageUrl(dto.getPlaceId()).getImageUrl());
+                        } catch (BaseException e) {
+                            throw new RuntimeException(e);
+                        }
+                        result.add(dto);
+                    });
+            return result;
+        }
     }
 
 
