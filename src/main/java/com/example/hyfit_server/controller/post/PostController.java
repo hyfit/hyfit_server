@@ -7,6 +7,7 @@ import com.example.hyfit_server.service.image.S3Service;
 import com.example.hyfit_server.service.post.PostService;
 import com.example.hyfit_server.service.user.UserService;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Slice;
@@ -47,10 +48,10 @@ public class PostController {
         }
     }
 
-    @GetMapping("/all")
-    public BaseResponse<List<PostDto>> getAllPostsOfUser(@RequestParam String email) throws BaseException {
+    @GetMapping("/all-posts")
+    public BaseResponse<List<MyPostDto>> getPostListOfUser(@RequestParam String email) throws BaseException {
         try {
-            List<PostDto> result = postService.getAllPostsOfUser(email);
+            List<MyPostDto> result = postService.getPostListOfUser(email);
             return new BaseResponse<>(result);
         }
         catch (BaseException exception) {
@@ -141,6 +142,56 @@ public class PostController {
 
             postService.unlikePost(postLikeReq);
             String result = "게시물 좋아요 취소 완료";
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @PostMapping("/{id}/comment/save")
+    BaseResponse<PostCommentDto> saveComment(HttpServletRequest request, @PathVariable("id")long id, @Valid @RequestBody SaveCommentReq saveCommentReq, BindingResult bindingResult) throws BaseException {
+        try {
+            String email = userService.getEmailFromToken(request);
+            SaveCommentDto saveCommentDto = SaveCommentDto.builder()
+                    .postId(id)
+                    .email(email)
+                    .content(saveCommentReq.getContent())
+                    .build();
+
+            PostCommentDto result = postService.saveComment(saveCommentDto, bindingResult);
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @GetMapping({"{id}/comment"})
+    BaseResponse<List<PostCommentListDto>> getCommentList(@PathVariable("id")long id) throws BaseException {
+        try {
+            List<PostCommentListDto> result = postService.getCommentList(id);
+
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @DeleteMapping("/{id}/comment")
+    BaseResponse<String> deleteComment(HttpServletRequest request, @PathVariable("id")long id, @RequestParam long commentId) throws BaseException {
+        try{
+            String email = userService.getEmailFromToken(request);
+            DeleteCommentReq deleteCommentReq = DeleteCommentReq.builder()
+                    .email(email)
+                    .postId(id)
+                    .commentId(commentId)
+                    .build();
+
+            postService.deleteComment(deleteCommentReq);
+
+            String result = "게시물 삭제 완료";
             return new BaseResponse<>(result);
         }
         catch (BaseException exception) {

@@ -3,23 +3,20 @@ import static com.example.hyfit_server.domain.post.QPostEntity.postEntity;
 import static com.example.hyfit_server.domain.user.QUserEntity.userEntity;
 import static com.example.hyfit_server.domain.image.QImageEntity.imageEntity;
 import static com.example.hyfit_server.domain.exercise.QExerciseEntity.exerciseEntity;
-import static com.example.hyfit_server.domain.user.QFollowEntity.followEntity;
+import static com.example.hyfit_server.domain.post.QPostLikeEntity.postLikeEntity;
+import static com.example.hyfit_server.domain.post.QPostCommentEntity.postCommentEntity;
 
-import com.example.hyfit_server.dto.Post.PostPaginationDto;
-import com.example.hyfit_server.dto.Post.QPostPaginationDto;
+import com.example.hyfit_server.dto.Post.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
@@ -82,6 +79,40 @@ public class PostCustomRepositoryImpl implements PostCustomRepository{
         return checkLastPage(pageable, results);
     }
 
+    @Override
+    public List<MyPostDto> getAllMyPostListByEmail(String email) {
+        return queryFactory.select( new QMyPostDto(
+                postEntity.postId,
+                imageEntity.imageUrl,
+                postLikeEntity.postId.count(),
+                postCommentEntity.postId.count()
+        ))
+                .from(postEntity)
+                .join(imageEntity).on(postEntity.postId.eq(imageEntity.postId))
+                .join(postLikeEntity).on(postEntity.postId.eq(postLikeEntity.postId))
+                .join(postCommentEntity).on(postEntity.postId.eq(postCommentEntity.postId))
+                .where(postEntity.email.eq(email))
+                .orderBy(postEntity.postId.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<PostCommentListDto> getCommentListByPostId(Long postId) {
+        return queryFactory.select( new QPostCommentListDto(
+                postEntity.postId,
+                postCommentEntity.commentId,
+                postCommentEntity.email,
+                postCommentEntity.content,
+                userEntity.profile_img,
+                userEntity.nickName,
+                postCommentEntity.createdAt
+                ))
+                .from(postEntity)
+                .join(postCommentEntity).on(postEntity.postId.eq(postCommentEntity.postId))
+                .join(userEntity).on(postCommentEntity.email.eq(userEntity.email))
+                .orderBy(postCommentEntity.commentId.asc())
+                .fetch();
+    }
 
 
     private BooleanExpression ltPostId(Long lastPostId) {

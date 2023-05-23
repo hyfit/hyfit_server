@@ -36,10 +36,12 @@ public enum BaseResponseStatus {
 
     // post 관련
 
-    NO_POST_CONTENTS(false, 2301, "내용을 입력해주세요."),
+    NO_POST_CONTENT(false, 2301, "내용을 입력해주세요."),
     NO_POST_ERROR(false, 2302, "해당 게시물이 없습니다."),
     ALREADY_LIKED_POST(false, 2303, "이미 좋아요한 게시물입니다."),
     NO_POST_LIKE_ERROR(false, 2304, "좋아요를 누르지 않은 게시물입니다."),
+    NO_COMMENT_ERROR( false, 2305, "해당 댓글이 없습니다." ),
+    NO_COMMENT_CONTENT(false, 2306, "댓글 내용을 입력해주세요."),
 
     // image 관련
     NOT_SUPPORTED_IMAGE_FORMAT(false, 2401, "지원되는 파일 형식이 아닙니다."),

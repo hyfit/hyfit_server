@@ -40,10 +40,11 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final ExerciseRepository exerciseRepository;
     private final FollowService followService;
+    private final PostCommentRepository postCommentRepository;
 
     public PostSaveRes savePost(PostSaveDto postSaveDto, String imageUrl, Errors errors) throws BaseException {
         if(errors.hasErrors()) {
-            throw new BaseException(NO_POST_CONTENTS);
+            throw new BaseException(NO_POST_CONTENT);
         }
         PostSaveRes result = new PostSaveRes();
         PostEntity postEntity = postRepository.save(postSaveDto.toEntity());
@@ -60,10 +61,8 @@ public class PostService {
         return result;
     }
 
-    public List<PostDto> getAllPostsOfUser(String email) throws BaseException {
-        List<PostDto> result = postRepository.findAllByEmail(email)
-                .stream().map(m -> m.toDto())
-                .collect(Collectors.toList());
+    public List<MyPostDto> getPostListOfUser(String email) throws BaseException {
+        List<MyPostDto> result = postRepository.getAllMyPostListByEmail(email);
         return result;
     }
 
@@ -129,6 +128,33 @@ public class PostService {
         postLikeRepository.delete(postLikeEntity);
     }
 
+    public PostCommentDto saveComment(SaveCommentDto saveCommentDto, Errors errors) throws BaseException {
+        if(errors.hasErrors()) {
+            throw new BaseException(NO_COMMENT_CONTENT);
+        }
+        PostCommentEntity result = postCommentRepository.save(saveCommentDto.toEntity());
+
+        return result.toDto();
+    }
+
+    public List<PostCommentListDto> getCommentList(long postId) throws BaseException {
+        if(postRepository.findByPostId(postId) == null) {
+            throw new BaseException(NO_POST_ERROR);
+        }
+
+        List<PostCommentListDto> result = postRepository.getCommentListByPostId(postId);
+        return result;
+    }
+
+
+    public void deleteComment(DeleteCommentReq deleteCommentReq) throws BaseException {
+        PostCommentEntity postCommentEntity = postCommentRepository.findByEmailAndPostIdAndCommentId(deleteCommentReq.getEmail(), deleteCommentReq.getPostId(),deleteCommentReq.getCommentId());
+        if(postCommentEntity == null) {
+            throw new BaseException(NO_COMMENT_ERROR);
+        }
+        postCommentRepository.delete(postCommentEntity);
+    }
+
     public void deletePost(String email, long id) throws BaseException {
         PostEntity postEntity = postRepository.findByEmailAndPostId(email, id);
         if(postEntity == null) {
@@ -140,6 +166,10 @@ public class PostService {
         s3Service.deleteFile(imgUrl);
         // image 데이터 삭제
         imageRepository.deleteByPostId(id);
+        // postlike 삭제
+        postLikeRepository.deleteAllByPostId(id);
+        // postcomment 삭제
+        postCommentRepository.deleteAllByPostId(id);
 
         postRepository.delete(postEntity);
     }
@@ -151,7 +181,6 @@ public class PostService {
         long followingNum = followRepository.countByFollowerEmail(email);
         long followerNum = followRepository.countByFollowingEmail(email);
         PostProfileRes result = PostProfileRes.builder()
-                .email(email)
                 .userProfileDto(userProfileDto)
                 .postNum(postNum)
                 .followingNum(followingNum)
