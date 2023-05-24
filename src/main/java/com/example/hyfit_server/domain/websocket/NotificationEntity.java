@@ -15,6 +15,9 @@ public class NotificationEntity {
     private String sender;
     private String receiver;
 
+    private String sender_nickName;
+    private String receiver_nickName;
+
     // exerciseWithId
     private int data;
 
