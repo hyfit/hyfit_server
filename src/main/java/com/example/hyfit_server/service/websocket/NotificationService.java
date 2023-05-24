@@ -1,6 +1,6 @@
 package com.example.hyfit_server.service.websocket;
 
-import com.example.hyfit_server.domain.websocket.NotificationEntity;
+import com.example.hyfit_server.domain.websocket.RequestEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -14,8 +14,7 @@ public class NotificationService {
         messagingTemplate.convertAndSend("/sub/exerciseWith/" + userEmail, message);
     }
 
-    public void sendAlarm(NotificationEntity notificationData) {
-        System.out.println("THISISDESTI!!!! : " + "/sub/channel/" + notificationData.getReceiver());
+    public void sendAlarm(RequestEntity notificationData) {
         messagingTemplate.convertAndSend("/sub/channel/" + notificationData.getReceiver(), notificationData);
     }
 

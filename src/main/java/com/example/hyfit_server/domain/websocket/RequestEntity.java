@@ -7,9 +7,9 @@ import lombok.*;
 @Builder
 @Data
 @Setter
-public class NotificationEntity {
+public class RequestEntity {
     public enum Type {
-        ENTER, ALARM, QUIT
+        REQUEST, ACCEPT, QUIT
     }
     private Type type;
     private String sender;
@@ -17,6 +17,9 @@ public class NotificationEntity {
 
     private String sender_nickName;
     private String receiver_nickName;
+
+    private String workoutType;
+    private int goalId;
 
     // exerciseWithId
     private int data;
