@@ -2,6 +2,8 @@ package com.example.hyfit_server.controller.exercise;
 
 import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.config.response.BaseResponse;
+import com.example.hyfit_server.domain.exercise.ExerciseEntity;
+import com.example.hyfit_server.domain.exercise.ExerciseRepository;
 import com.example.hyfit_server.dto.exercise.ExerciseDto;
 import com.example.hyfit_server.dto.exercise.ExerciseEndReq;
 import com.example.hyfit_server.dto.exercise.ExerciseStartReq;
@@ -21,6 +23,8 @@ public class ExerciseController {
 
     private final ExerciseService exerciseService;
     private final UserService userService;
+
+    private final ExerciseRepository exerciseRepository;
 
 
     @PostMapping("/start")
@@ -66,6 +70,13 @@ public class ExerciseController {
         catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
+    }
+
+    @DeleteMapping("")
+    public BaseResponse<Long> deleteExercise(@RequestParam long exerciseId) throws BaseException{
+        ExerciseEntity exerciseEntity =exerciseRepository.findByExerciseId(exerciseId);
+        exerciseRepository.delete(exerciseEntity);
+        return new BaseResponse<>(exerciseId);
     }
 
 }
