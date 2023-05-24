@@ -8,6 +8,7 @@ import com.example.hyfit_server.dto.exercise.ExerciseWithDto;
 import com.example.hyfit_server.dto.exercise.ExerciseWithStart;
 import com.example.hyfit_server.service.exerciseWith.ExerciseWithService;
 import com.example.hyfit_server.service.user.UserService;
+import com.example.hyfit_server.service.websocket.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,8 @@ public class ExerciseWithController {
     private final ExerciseWithRepository exerciseWithRepository;
     private final UserService userService;
 
+    private final NotificationService notificationService;
+
 
     @GetMapping("")
     public BaseResponse<ExerciseWithDto> getExerciseWith(@RequestParam int exerciseWithId)throws BaseException {
@@ -34,6 +37,7 @@ public class ExerciseWithController {
         try{
             String user1Email = userService.getEmailFromToken(request);
             ExerciseWithDto result = exerciseWithService.requestExercise(user1Email, user2Email);
+            notificationService.sendNotificationForExerciseWith(user2Email, user1Email + "," + result.getExerciseWithId());
             return new BaseResponse<>(result);
         }
         catch (BaseException exception) {
