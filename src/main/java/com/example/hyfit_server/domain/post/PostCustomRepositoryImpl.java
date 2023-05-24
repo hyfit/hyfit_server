@@ -44,7 +44,8 @@ public class PostCustomRepositoryImpl implements PostCustomRepository{
                 .join(exerciseEntity).on(postEntity.exercise_data_id.eq(exerciseEntity.exerciseId))
                 .where(ltPostId(lastPostId),
                         userEntity.email.in(followingList),
-                        checkExerciseType(searchType))
+                        checkExerciseType(searchType),
+                        postIdIsNotNull())
                 .orderBy(postEntity.postId.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
@@ -71,7 +72,8 @@ public class PostCustomRepositoryImpl implements PostCustomRepository{
                 .join(imageEntity).on(postEntity.postId.eq(imageEntity.postId))
                 .join(exerciseEntity).on(postEntity.exercise_data_id.eq(exerciseEntity.exerciseId))
                 .where(ltPostId(lastPostId),
-                        checkExerciseType(searchType))
+                        checkExerciseType(searchType),
+                        postIdIsNotNull())
                 .orderBy(postEntity.postId.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
@@ -80,17 +82,13 @@ public class PostCustomRepositoryImpl implements PostCustomRepository{
     }
 
     @Override
-    public List<MyPostDto> getAllMyPostListByEmail(String email) {
-        return queryFactory.select( new QMyPostDto(
+    public List<PostImgInfoDto> getAllMyPostListByEmail(String email) {
+        return queryFactory.select( new QPostImgInfoDto(
                 postEntity.postId,
-                imageEntity.imageUrl,
-                postLikeEntity.postId.count(),
-                postCommentEntity.postId.count()
+                imageEntity.imageUrl
         ))
                 .from(postEntity)
                 .join(imageEntity).on(postEntity.postId.eq(imageEntity.postId))
-                .join(postLikeEntity).on(postEntity.postId.eq(postLikeEntity.postId))
-                .join(postCommentEntity).on(postEntity.postId.eq(postCommentEntity.postId))
                 .where(postEntity.email.eq(email))
                 .orderBy(postEntity.postId.desc())
                 .fetch();
@@ -120,6 +118,11 @@ public class PostCustomRepositoryImpl implements PostCustomRepository{
             return null;
         }
         return postEntity.postId.lt(lastPostId);
+    }
+
+    // NPE 방지
+    private BooleanExpression postIdIsNotNull(){
+        return postEntity.postId.isNotNull();
     }
 
 //    private BooleanExpression checkFollowing(List<String> followingList, String email)

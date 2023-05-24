@@ -72,7 +72,7 @@ public class PostController {
         }
     }
 
-    @GetMapping("/all-users-post")
+    @GetMapping("/all-users-posts")
     public BaseResponse<Slice<PostPaginationDto>> getAllPostsOfAllUsersWithType(HttpServletRequest request, @RequestBody PostPageReq postPageReq) throws BaseException {
         try {
             String email = userService.getEmailFromToken(request);
@@ -191,7 +191,7 @@ public class PostController {
 
             postService.deleteComment(deleteCommentReq);
 
-            String result = "게시물 삭제 완료";
+            String result = "댓글 삭제 완료";
             return new BaseResponse<>(result);
         }
         catch (BaseException exception) {
