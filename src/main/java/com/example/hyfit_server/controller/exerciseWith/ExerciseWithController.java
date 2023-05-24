@@ -5,6 +5,7 @@ import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.domain.exercise.ExerciseWithRepository;
 import com.example.hyfit_server.dto.exercise.ExerciseDto;
 import com.example.hyfit_server.dto.exercise.ExerciseWithDto;
+import com.example.hyfit_server.dto.exercise.ExerciseWithReq;
 import com.example.hyfit_server.dto.exercise.ExerciseWithStart;
 import com.example.hyfit_server.service.exerciseWith.ExerciseWithService;
 import com.example.hyfit_server.service.user.UserService;
@@ -33,11 +34,10 @@ public class ExerciseWithController {
 
     // 처음 요청
     @PostMapping("/request")
-    public BaseResponse<ExerciseWithDto> requestExercise(HttpServletRequest request, @RequestParam String user2Email) throws BaseException {
+    public BaseResponse<ExerciseWithDto> requestExercise(HttpServletRequest request, @RequestBody ExerciseWithReq exerciseWithReq) throws BaseException {
         try{
             String user1Email = userService.getEmailFromToken(request);
-            ExerciseWithDto result = exerciseWithService.requestExercise(user1Email, user2Email);
-            notificationService.sendNotificationForExerciseWith(user2Email, user1Email + "," + result.getExerciseWithId());
+            ExerciseWithDto result = exerciseWithService.requestExercise(user1Email, exerciseWithReq);
             return new BaseResponse<>(result);
         }
         catch (BaseException exception) {
