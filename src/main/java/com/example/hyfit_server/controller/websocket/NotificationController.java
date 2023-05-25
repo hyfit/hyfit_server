@@ -3,6 +3,7 @@ package com.example.hyfit_server.controller.websocket;
 import com.example.hyfit_server.domain.user.UserEntity;
 import com.example.hyfit_server.domain.user.UserRepository;
 import com.example.hyfit_server.domain.websocket.AcceptEntity;
+import com.example.hyfit_server.domain.websocket.QuitEntity;
 import com.example.hyfit_server.domain.websocket.RequestEntity;
 import com.example.hyfit_server.domain.websocket.WorkoutEntity;
 import com.example.hyfit_server.service.websocket.NotificationService;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/alarm")
 public class NotificationController {
 
     private final UserRepository userRepository;
@@ -37,6 +37,11 @@ public class NotificationController {
     @MessageMapping("/workout")
     public WorkoutEntity workout(WorkoutEntity data){
         notificationService.sendWorkout(data);
+        return data;
+    }
+    @MessageMapping("/quit")
+    public QuitEntity quit(QuitEntity data){
+        notificationService.sendQuit(data);
         return data;
     }
 

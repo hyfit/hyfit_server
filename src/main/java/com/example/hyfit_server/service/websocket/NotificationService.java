@@ -1,6 +1,7 @@
 package com.example.hyfit_server.service.websocket;
 
 import com.example.hyfit_server.domain.websocket.AcceptEntity;
+import com.example.hyfit_server.domain.websocket.QuitEntity;
 import com.example.hyfit_server.domain.websocket.RequestEntity;
 import com.example.hyfit_server.domain.websocket.WorkoutEntity;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,10 @@ public class NotificationService {
     }
 
     public void sendWorkout(WorkoutEntity notificationData){
+        messagingTemplate.convertAndSend("/sub/channel/" + notificationData.getReceiver(), notificationData);
+    }
+
+    public void sendQuit(QuitEntity notificationData){
         messagingTemplate.convertAndSend("/sub/channel/" + notificationData.getReceiver(), notificationData);
     }
 
