@@ -18,8 +18,8 @@ public class AcceptEntity {
     private String sender_nickName;
     private String receiver_nickName;
 
-    private String exercise1id;
-    private String exercise2id;
+    private int exercise1id;
+    private int exercise2id;
 
     private String workoutType;
 
