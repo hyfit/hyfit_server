@@ -7,9 +7,9 @@ import lombok.*;
 @Builder
 @Data
 @Setter
-public class RequestEntity {
+public class AcceptEntity {
     public enum Type {
-        REQUEST, ACCEPT,WORKOUT, QUIT
+        REQUEST, ACCEPT, WORKOUT, QUIT
     }
     private Type type;
     private String sender;
@@ -18,8 +18,10 @@ public class RequestEntity {
     private String sender_nickName;
     private String receiver_nickName;
 
+    private String exercise1id;
+    private String exercise2id;
+
     private String workoutType;
-    private int goalId;
 
     // exerciseWithId
     private int data;

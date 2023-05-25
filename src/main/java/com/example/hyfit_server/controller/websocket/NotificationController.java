@@ -2,7 +2,9 @@ package com.example.hyfit_server.controller.websocket;
 
 import com.example.hyfit_server.domain.user.UserEntity;
 import com.example.hyfit_server.domain.user.UserRepository;
+import com.example.hyfit_server.domain.websocket.AcceptEntity;
 import com.example.hyfit_server.domain.websocket.RequestEntity;
+import com.example.hyfit_server.domain.websocket.WorkoutEntity;
 import com.example.hyfit_server.service.websocket.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -22,13 +24,19 @@ public class NotificationController {
     public RequestEntity request(RequestEntity data) {
         UserEntity userEntity = userRepository.findByEmail(data.getSender());
         System.out.println("NotificationController : data() => " + data.getData());
-        notificationService.sendAlarm(data);
+        notificationService.sendRequest(data);
         return data;
     }
 
     @MessageMapping("/accept")
-    public RequestEntity accept(RequestEntity data){
-        notificationService.sendAlarm(data);
+    public AcceptEntity accept(AcceptEntity data){
+        notificationService.sendAccept(data);
+        return data;
+    }
+
+    @MessageMapping("/workout")
+    public WorkoutEntity workout(WorkoutEntity data){
+        notificationService.sendWorkout(data);
         return data;
     }
 
