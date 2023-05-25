@@ -26,6 +26,12 @@ public class AcceptEntity {
     // exerciseWithId
     private int data;
 
+    private String user1lat;
+    private String user1lon;
+
+    private String user2lat;
+    private String user2lon;
+
 
     public void setSender(String sender) {this.sender = sender;}
     public void setData(int data){

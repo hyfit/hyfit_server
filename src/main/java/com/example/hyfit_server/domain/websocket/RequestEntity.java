@@ -19,10 +19,12 @@ public class RequestEntity {
     private String receiver_nickName;
 
     private String workoutType;
-    private int goalId;
 
     // exerciseWithId
     private int data;
+
+    private String lat;
+    private String lon;
 
 
     public void setSender(String sender) {this.sender = sender;}
