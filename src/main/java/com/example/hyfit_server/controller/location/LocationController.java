@@ -31,9 +31,9 @@ public class LocationController {
 
     // 고도 관련 location 저장
     @PostMapping("/redis-alt")
-    public BaseResponse<List<String>> saveRedisAltExercise(@RequestBody LocationAltRedisReq locationAltRedisReq) throws BaseException{
+    public BaseResponse<String> saveRedisAltExercise(@RequestBody LocationAltRedisReq locationAltRedisReq) throws BaseException{
         try {
-            List<String> result = locationService.saveRedisAltExercise(locationAltRedisReq);
+            String result = locationService.saveRedisAltExercise(locationAltRedisReq);
             return new BaseResponse<>(result);
         }catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -41,9 +41,9 @@ public class LocationController {
     }
 
     @PostMapping("/redis-exercise")
-    public BaseResponse<List<String>> saveRedisExercise(@RequestBody LocationRedisReq locationReq) throws BaseException{
+    public BaseResponse<String> saveRedisExercise(@RequestBody LocationRedisReq locationReq) throws BaseException{
         try {
-            List<String> result = locationService.saveRedisExercise(locationReq);
+            String result = locationService.saveRedisExercise(locationReq);
             return new BaseResponse<>(result);
         }catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

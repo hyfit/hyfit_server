@@ -16,7 +16,7 @@ public class WorkoutEntity {
     private String sender;
     private String receiver;
 
-    private List<String> locList;
+    private String locList;
 
 //    public void setSender(String sender) {this.sender = sender;}
 //    public void setData(int data){
