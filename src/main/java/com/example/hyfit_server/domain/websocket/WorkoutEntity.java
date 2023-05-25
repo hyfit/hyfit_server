@@ -13,6 +13,8 @@ public class WorkoutEntity {
     public enum Type {
         REQUEST, ACCEPT, WORKOUT, QUIT
     }
+
+    private Type type;
     private String sender;
     private String receiver;
 
