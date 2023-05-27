@@ -60,9 +60,14 @@ public class PostController {
     }
 
     @GetMapping("/following-posts")
-    public BaseResponse<Slice<PostPaginationDto>> getAllPostsOfFollowingUsersWithType(HttpServletRequest request, @RequestBody PostPageReq postPageReq) throws BaseException {
+    public BaseResponse<Slice<PostPaginationDto>> getAllPostsOfFollowingUsersWithType(HttpServletRequest request, @RequestParam(required = false) Long lastPostId, @RequestParam(required = false) String searchType, @RequestParam int size) throws BaseException {
         try {
             String email = userService.getEmailFromToken(request);
+            PostPageReq postPageReq = PostPageReq.builder()
+                    .lastPostId(lastPostId)
+                    .searchType(searchType)
+                    .size(size)
+                    .build();
 
             Slice<PostPaginationDto> result = postService.getAllPostsOfFollowingUsersWithType(email, postPageReq);
             return new BaseResponse<>(result);
@@ -73,9 +78,14 @@ public class PostController {
     }
 
     @GetMapping("/all-users-posts")
-    public BaseResponse<Slice<PostPaginationDto>> getAllPostsOfAllUsersWithType(HttpServletRequest request, @RequestBody PostPageReq postPageReq) throws BaseException {
+    public BaseResponse<Slice<PostPaginationDto>> getAllPostsOfAllUsersWithType(HttpServletRequest request, @RequestParam(required = false) Long lastPostId, @RequestParam(required = false) String searchType, @RequestParam int size) throws BaseException {
         try {
             String email = userService.getEmailFromToken(request);
+            PostPageReq postPageReq = PostPageReq.builder()
+                    .lastPostId(lastPostId)
+                    .searchType(searchType)
+                    .size(size)
+                    .build();
 
             Slice<PostPaginationDto> result = postService.getAllPostsOfAllUsersWithType(email, postPageReq);
             return new BaseResponse<>(result);
