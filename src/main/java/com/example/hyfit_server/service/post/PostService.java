@@ -191,6 +191,9 @@ public class PostService {
 
     public PostProfileRes getProfileInfo(String email) throws BaseException {
         UserProfileDto userProfileDto = userRepository.findInfoByEmail(email);
+        if(userProfileDto == null) {
+            throw new BaseException(NO_USER_ERROR);
+        }
 
         long postNum = postRepository.countDistinctByEmail(email);
         long followingNum = followRepository.countByFollowerEmail(email);
