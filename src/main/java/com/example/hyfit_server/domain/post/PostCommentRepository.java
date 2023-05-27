@@ -7,7 +7,7 @@ public interface PostCommentRepository extends JpaRepository<PostCommentEntity, 
     PostCommentEntity findAllByPostId(long postId);
 
     PostCommentEntity findByEmailAndPostIdAndCommentId(String email, long postId, long commentId);
-
+    long countAllByPostId(long postId);
 
     void deleteAllByPostId(long postId);
 

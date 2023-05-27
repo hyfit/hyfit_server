@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 import static com.example.hyfit_server.config.response.BaseResponseStatus.*;
@@ -62,7 +64,20 @@ public class PostService {
     }
 
     public List<MyPostDto> getPostListOfUser(String email) throws BaseException {
-        List<MyPostDto> result = postRepository.getAllMyPostListByEmail(email);
+        List<PostImgInfoDto> temp = postRepository.getAllMyPostListByEmail(email);
+        ListIterator<PostImgInfoDto> iterator = temp.listIterator();
+        List<MyPostDto> result = new ArrayList<>();
+
+        while(iterator.hasNext()) {
+            PostImgInfoDto dto = iterator.next();
+            result.add(MyPostDto.builder()
+                    .postId(dto.getPostId())
+                    .postImageUrl(dto.getImgUrl())
+                    .postLikeNum(postLikeRepository.countByPostId(dto.getPostId()))
+                    .postCommentNum(postCommentRepository.countAllByPostId(dto.getPostId()))
+                    .build());
+        }
+
         return result;
     }
 

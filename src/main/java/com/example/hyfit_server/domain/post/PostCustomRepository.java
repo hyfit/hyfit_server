@@ -2,6 +2,7 @@ package com.example.hyfit_server.domain.post;
 
 import com.example.hyfit_server.dto.Post.MyPostDto;
 import com.example.hyfit_server.dto.Post.PostCommentListDto;
+import com.example.hyfit_server.dto.Post.PostImgInfoDto;
 import com.example.hyfit_server.dto.Post.PostPaginationDto;
 import org.springframework.data.domain.Slice;
 
@@ -18,7 +19,7 @@ public interface PostCustomRepository {
 
     Slice<PostPaginationDto> searchAllBySlice(Long postId, String email, Pageable pageable, String searchType);
 
-    List<MyPostDto> getAllMyPostListByEmail(String email);
+    List<PostImgInfoDto> getAllMyPostListByEmail(String email);
 
     List<PostCommentListDto> getCommentListByPostId(Long postId);
 
