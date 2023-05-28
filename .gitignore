@@ -39,3 +39,5 @@ out/
 application.properties
 application.yml
 email.properties
+
+/src/main/generated/com/example/hyfit_server/

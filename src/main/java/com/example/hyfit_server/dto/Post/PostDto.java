@@ -14,7 +14,7 @@ public class PostDto {
 
     private String email;
 
-    private long exercise_data_id;
+    private String type;
 
     private String content;
 
@@ -23,17 +23,17 @@ public class PostDto {
         PostEntity postEntity = PostEntity.builder()
                 .postId(postId)
                 .email(email)
-                .exercise_data_id(exercise_data_id)
+                .type(type)
                 .content(content)
                 .build();
         return postEntity;
     }
 
     @Builder
-    public PostDto(long postId, String email, long exercise_data_id, String content){
+    public PostDto(long postId, String email, String type, String content){
         this.postId = postId;
         this.email = email;
-        this.exercise_data_id = exercise_data_id;
+        this.type = type;
         this.content = content;
     }
 }

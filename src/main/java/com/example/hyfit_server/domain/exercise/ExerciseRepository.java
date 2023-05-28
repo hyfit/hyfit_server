@@ -10,4 +10,6 @@ public interface ExerciseRepository extends JpaRepository<ExerciseEntity,Long> {
 
    List<ExerciseEntity> findAllByGoalId(long goalId);
 
+   List<ExerciseEntity> findAllByEmail(String email);
+
 }
