@@ -31,19 +31,19 @@ public class LocationService {
     }
 
     // redis에 실외운동 저장
-    public List<String> saveRedisExercise(LocationRedisReq locationReq) throws BaseException {
+    public String saveRedisExercise(LocationRedisReq locationReq) throws BaseException {
         String key = "exercise_" + locationReq.getId();
         String data = locationReq.getLatitude() + "," + locationReq.getLongitude() + "," + locationReq.getAltitude();
         redisService.addToList(key, data);
-        return redisService.getList(key,0,-1);
+        return data;
     }
 
     // redis에 고도 운동 저장
-    public List<String> saveRedisAltExercise(LocationAltRedisReq locationAltRedisReq) throws BaseException {
+    public String saveRedisAltExercise(LocationAltRedisReq locationAltRedisReq) throws BaseException {
         String key = "exercise_" + locationAltRedisReq.getId();
         String data = locationAltRedisReq.getLatitude() + "," + locationAltRedisReq.getLongitude() + "," + locationAltRedisReq.getAltitude() +  "," + locationAltRedisReq.getIncrease();
         redisService.addToList(key, data);
-        return redisService.getList(key,0,-1);
+        return data;
     }
 
 

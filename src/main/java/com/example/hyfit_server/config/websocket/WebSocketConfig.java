@@ -28,8 +28,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         }
 
         // 토큰 인증
-        @Override
-        public void configureClientInboundChannel(ChannelRegistration registration) {
-                registration.interceptors(stompHandler); // 핸들러 등록
-        }
+//        @Override
+//        public void configureClientInboundChannel(ChannelRegistration registration) {
+//                registration.interceptors(stompHandler); // 핸들러 등록
+//        }
 }

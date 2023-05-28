@@ -5,6 +5,7 @@ import com.example.hyfit_server.domain.exercise.ExerciseEntity;
 import com.example.hyfit_server.domain.exercise.ExerciseWithEntity;
 import com.example.hyfit_server.domain.exercise.ExerciseWithRepository;
 import com.example.hyfit_server.dto.exercise.ExerciseWithDto;
+import com.example.hyfit_server.dto.exercise.ExerciseWithReq;
 import com.example.hyfit_server.dto.exercise.ExerciseWithStart;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ExerciseWithService {
     private final ExerciseWithRepository exerciseWithRepository;
 
-    public ExerciseWithDto requestExercise(String user1Email, String user2Email)  throws BaseException {
+    public ExerciseWithDto requestExercise(String user1Email, ExerciseWithReq exerciseWithReq)  throws BaseException {
         ExerciseWithEntity exerciseWithEntity = ExerciseWithEntity.builder()
                 .user1Email(user1Email)
-                .user2Email(user2Email)
+                .user2Email(exerciseWithReq.getUser2Email())
+                .user1ExerciseId(exerciseWithReq.getUser1exerciseId())
                 .build();
         return exerciseWithRepository.save(exerciseWithEntity).toDto();
 
