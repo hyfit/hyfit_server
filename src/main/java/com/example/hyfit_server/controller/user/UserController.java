@@ -3,6 +3,7 @@ package com.example.hyfit_server.controller.user;
 import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.config.security.JwtTokenProvider;
+import com.example.hyfit_server.domain.user.UserRepository;
 import com.example.hyfit_server.domain.user.UserRole;
 import com.example.hyfit_server.dto.user.*;
 import com.example.hyfit_server.service.image.S3Service;
@@ -24,6 +25,8 @@ public class UserController {
 
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final UserRepository userRepository;
 
     private final RedisService redisService;
     private final S3Service s3Service;
@@ -109,6 +112,12 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    @GetMapping("/email")
+    public BaseResponse<UserDto> getUserInfoByEmail(@RequestParam String email) throws BaseException{
+        return new BaseResponse<>(userRepository.findByEmail(email).toDto());
+    }
+
 
     // 회원 정보 수정
     @PatchMapping("")

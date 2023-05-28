@@ -8,6 +8,8 @@ public interface GoalRepository extends JpaRepository<GoalEntity,Long> {
 
     List<GoalEntity> findAllByEmailAndGoalStatus(String email, int status);
 
+    List<GoalEntity> findAllByEmailAndGoalStatusAndType(String email, int status,String type);
+
     GoalEntity findByPlaceAndEmailAndGoalStatus(String place, String email, int status);
 
     GoalEntity findByGoalId(long id);

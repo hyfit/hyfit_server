@@ -3,11 +3,7 @@ package com.example.hyfit_server.controller.location;
 
 import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.config.response.BaseResponse;
-import com.example.hyfit_server.dto.location.LocationDto;
-import com.example.hyfit_server.dto.location.LocationExerciseSaveReq;
-import com.example.hyfit_server.dto.location.LocationPostSaveReq;
-import com.example.hyfit_server.dto.location.LocationRedisReq;
-import com.example.hyfit_server.dto.location.LocationRedisRes;
+import com.example.hyfit_server.dto.location.*;
 import com.example.hyfit_server.service.location.LocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +29,21 @@ public class LocationController {
 
     }
 
-    @PostMapping("/redis-exercise")
-    public BaseResponse<List<String>> saveRedisExercise(@RequestBody LocationRedisReq locationReq) throws BaseException{
+    // 고도 관련 location 저장
+    @PostMapping("/redis-alt")
+    public BaseResponse<String> saveRedisAltExercise(@RequestBody LocationAltRedisReq locationAltRedisReq) throws BaseException{
         try {
-            List<String> result = locationService.saveRedisExercise(locationReq);
+            String result = locationService.saveRedisAltExercise(locationAltRedisReq);
+            return new BaseResponse<>(result);
+        }catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @PostMapping("/redis-exercise")
+    public BaseResponse<String> saveRedisExercise(@RequestBody LocationRedisReq locationReq) throws BaseException{
+        try {
+            String result = locationService.saveRedisExercise(locationReq);
             return new BaseResponse<>(result);
         }catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -72,5 +79,6 @@ public class LocationController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
 
 }

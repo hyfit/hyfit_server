@@ -29,6 +29,10 @@ public class ExerciseDto {
 
     private String distance;
 
+    private String increase;
+
+    private String peakAlt;
+
     /* DTO -> Entity */
     public ExerciseEntity toEntity(){
         ExerciseEntity exerciseEntity = ExerciseEntity.builder()
@@ -41,12 +45,14 @@ public class ExerciseDto {
                 .end(LocalDateTime.parse(end))
                 .totalTime(totalTime)
                 .distance(distance)
+                .increase(increase)
+                .peakAlt(peakAlt)
                 .build();
         return exerciseEntity;
     }
 
     @Builder
-    public ExerciseDto(long exerciseId, long goalId, String email, String type, String pace,String distance, String start, String end, long totalTime){
+    public ExerciseDto(long exerciseId, long goalId, String email, String type, String pace,String distance, String start, String end, long totalTime,String increase,String peakAlt){
         this.exerciseId = exerciseId;
         this.goalId = goalId;
         this.email = email;
@@ -56,6 +62,8 @@ public class ExerciseDto {
         this.start = start;
         this.end = end;
         this.totalTime = totalTime;
+        this.increase = increase;
+        this.peakAlt = peakAlt;
     }
 
 }

@@ -37,8 +37,10 @@ public class GoalEntity extends BaseTimeEntity {
 
     private String description;
 
+    private String gain;
+
     @Builder
-    public GoalEntity(long goalId, String email, String place, String type, int goalStatus, String rate, String description){
+    public GoalEntity(long goalId, String email, String place, String type, int goalStatus, String rate, String description, String gain){
         this.goalId = goalId;
         this.email = email;
         this.place = place;
@@ -46,10 +48,12 @@ public class GoalEntity extends BaseTimeEntity {
         this.goalStatus = goalStatus;
         this.rate = rate;
         this.description = description;
+        this.gain = gain;
     }
     /* Entity -> DTO */
 
     public GoalDto toDto(){
+        String createdAtString = (getCreatedAt() != null) ? getCreatedAt().toString() : null;
         return  GoalDto.builder().
                 goalId(goalId)
                 .email(email)
@@ -58,12 +62,13 @@ public class GoalEntity extends BaseTimeEntity {
                 .goalStatus(goalStatus)
                 .description(description)
                 .rate(rate)
-                .createdAt(getCreatedAt().toString())
+                .gain(gain)
+                .createdAt(createdAtString)
                 .build();
     }
 
     // modify
-    public GoalEntity modify(String rate,int status){
+    public GoalEntity modify(String rate,int status,String gain){
         return GoalEntity.builder()
                 .goalId(goalId)
                 .email(email)
@@ -72,6 +77,7 @@ public class GoalEntity extends BaseTimeEntity {
                 .goalStatus(status)
                 .description(description)
                 .rate(rate)
+                .gain(gain)
                 .build();
     }
 

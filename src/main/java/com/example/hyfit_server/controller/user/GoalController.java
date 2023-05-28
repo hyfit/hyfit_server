@@ -5,16 +5,14 @@ import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.config.security.JwtTokenProvider;
 import com.example.hyfit_server.domain.user.GoalEntity;
 import com.example.hyfit_server.domain.user.GoalRepository;
-import com.example.hyfit_server.dto.Goal.GoalAddDto;
-import com.example.hyfit_server.dto.Goal.GoalDto;
-import com.example.hyfit_server.dto.Goal.PlaceDto;
-import com.example.hyfit_server.dto.Goal.PlaceReq;
+import com.example.hyfit_server.dto.Goal.*;
 import com.example.hyfit_server.service.user.GoalService;
 import com.example.hyfit_server.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -62,6 +60,29 @@ public class GoalController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+    @GetMapping("/mountain")
+    public BaseResponse<List<GoalDto>> getAllMountainGoalProgress(HttpServletRequest request) throws BaseException {
+        try{
+            String userEmail = userService.getEmailFromToken(request);
+            List<GoalDto> result = goalService.getAllMountainGoalProgress(userEmail);
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    @GetMapping("/building")
+    public BaseResponse<List<GoalDto>> getAllBuildingGoalProgress(HttpServletRequest request) throws BaseException {
+        try{
+            String userEmail = userService.getEmailFromToken(request);
+            List<GoalDto> result = goalService.getAllBuildingGoalProgress(userEmail);
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 
     @GetMapping("/done")
     public BaseResponse<List<GoalDto>> getAllGoalDone(HttpServletRequest request) throws BaseException {
@@ -75,10 +96,10 @@ public class GoalController {
         }
     }
 
-    @PatchMapping("/rate")
-    public BaseResponse<GoalDto> modifyGoal(@RequestParam long id, String rate) throws BaseException {
+    @PatchMapping("")
+    public BaseResponse<GoalDto> modifyGoal(@RequestParam long id,String gain) throws BaseException {
         try{
-            GoalDto goalDto = goalService.modifyGoal(id,rate);
+            GoalDto goalDto = goalService.modifyGoal(id,gain);
             return new BaseResponse<>(goalDto);
         }
         catch (BaseException exception) {
@@ -132,6 +153,19 @@ public class GoalController {
                 return  new BaseResponse<>(result.size()/5);
             }
             else return  new BaseResponse<>(result.size()/5+1);
+        }
+        catch (BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @GetMapping("/place-rec")
+    public BaseResponse<List<PlaceImageDto>> getPlaceRec(HttpServletRequest request)  throws BaseException {
+        try{
+            String userEmail = userService.getEmailFromToken(request);
+            List<PlaceImageDto> result = goalService.getPlaceRec(userEmail);
+            Collections.shuffle(result);
+            return  new BaseResponse<>(result.subList(0, 5));
         }
         catch (BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

@@ -2,6 +2,7 @@ package com.example.hyfit_server.service.exercise;
 
 
 import com.example.hyfit_server.config.response.BaseException;
+import com.example.hyfit_server.config.response.BaseResponse;
 import com.example.hyfit_server.domain.exercise.ExerciseEntity;
 import com.example.hyfit_server.domain.exercise.ExerciseRepository;
 import com.example.hyfit_server.dto.exercise.ExerciseDto;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Transactional
@@ -36,8 +39,20 @@ public class ExerciseService {
     public ExerciseDto exerciseEnd(ExerciseEndReq exerciseEndReq) throws BaseException{
         ExerciseEntity exerciseEntity = exerciseRepository.findByExerciseId(exerciseEndReq.getExerciseId());
         exerciseEntity.exerciseEnd(exerciseEndReq);
-
         return exerciseEntity.toDto();
+    }
+
+    public List<ExerciseDto> exerciseByGoal(long goalId)  throws BaseException{
+        List<ExerciseDto> result = exerciseRepository.findAllByGoalId(goalId).stream()
+                .map(m -> m.toDto())
+                .collect(Collectors.toList());
+        return result;
+
+    }
+
+    public ExerciseDto getExercise(long exerciseId) throws BaseException{
+        ExerciseDto result = exerciseRepository.findByExerciseId(exerciseId).toDto();
+        return result;
 
     }
 
