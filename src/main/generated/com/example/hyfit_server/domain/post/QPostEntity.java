@@ -28,12 +28,12 @@ public class QPostEntity extends EntityPathBase<PostEntity> {
 
     public final StringPath email = createString("email");
 
-    public final NumberPath<Long> exercise_data_id = createNumber("exercise_data_id", Long.class);
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
     public final NumberPath<Long> postId = createNumber("postId", Long.class);
+
+    public final StringPath type = createString("type");
 
     public QPostEntity(String variable) {
         super(PostEntity.class, forVariable(variable));

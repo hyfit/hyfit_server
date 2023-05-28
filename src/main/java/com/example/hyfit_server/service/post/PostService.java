@@ -13,6 +13,7 @@ import com.example.hyfit_server.dto.user.UserProfileDto;
 import com.example.hyfit_server.service.image.ImageService;
 import com.example.hyfit_server.service.image.S3Service;
 import com.example.hyfit_server.service.user.FollowService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -82,7 +83,11 @@ public class PostService {
     }
 
     public Slice<PostPaginationDto> getAllPostsOfFollowingUsersWithType(String email, PostPageReq postPageReq) throws BaseException{
-        List<String> followingList = followService.getFollowing(email);
+        List<String> tempList = followService.getFollowing(email);
+        List<String> followingList = tempList.stream()
+                .map(m -> m = m.substring(0, m.indexOf(",")))
+                .collect(Collectors.toList());
+
         PageRequest pageRequest = PageRequest.of(0, postPageReq.getSize());
         Slice<PostPaginationDto> result = postRepository.searchAllFollowingBySlice(postPageReq.getLastPostId(), email, followingList, pageRequest, postPageReq.getSearchType());
         return result;
@@ -102,7 +107,7 @@ public class PostService {
         String imgUrl = imageRepository.findByPostId(id).getImageUrl();
         UserProfileDto userProfileDto = userRepository.findInfoByEmail(email);
         long postLikeNum = postLikeRepository.countByPostId(postEntity.getPostId());
-        String type = exerciseRepository.findByExerciseId(postEntity.getExercise_data_id()).getType();
+        String type = postEntity.getType();
 
         GetOnePostRes result = GetOnePostRes.builder()
                 .postDto(postEntity.toDto())

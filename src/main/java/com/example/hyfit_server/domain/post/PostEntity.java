@@ -20,17 +20,18 @@ public class PostEntity extends BaseTimeEntity {
 
     private String email;
 
-    private long exercise_data_id;
+    @Column(nullable = false)
+    private String type;
 
     @Column(nullable = false)
     private String content;
 
 
     @Builder
-    public PostEntity(long postId, String email, long exercise_data_id, String content){
+    public PostEntity(long postId, String email, String type, String content){
         this.postId = postId;
         this.email = email;
-        this.exercise_data_id = exercise_data_id;
+        this.type = type;
         this.content = content;
     }
 
@@ -38,7 +39,7 @@ public class PostEntity extends BaseTimeEntity {
         return PostDto.builder()
                 .postId(postId)
                 .email(email)
-                .exercise_data_id(exercise_data_id)
+                .type(type)
                 .content(content)
                 .build();
     }

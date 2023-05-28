@@ -2,8 +2,6 @@ package com.example.hyfit_server.domain.post;
 import static com.example.hyfit_server.domain.post.QPostEntity.postEntity;
 import static com.example.hyfit_server.domain.user.QUserEntity.userEntity;
 import static com.example.hyfit_server.domain.image.QImageEntity.imageEntity;
-import static com.example.hyfit_server.domain.exercise.QExerciseEntity.exerciseEntity;
-import static com.example.hyfit_server.domain.post.QPostLikeEntity.postLikeEntity;
 import static com.example.hyfit_server.domain.post.QPostCommentEntity.postCommentEntity;
 
 import com.example.hyfit_server.dto.Post.*;
@@ -34,14 +32,13 @@ public class PostCustomRepositoryImpl implements PostCustomRepository{
                         postEntity.postId,
                         postEntity.content,
                         imageEntity.imageUrl,
-                        exerciseEntity.type,
+                        postEntity.type,
                         postEntity.createdAt
                         )
                 )
                 .from(postEntity)
                 .join(userEntity).on(postEntity.email.eq(userEntity.email))
                 .join(imageEntity).on(postEntity.postId.eq(imageEntity.postId))
-                .join(exerciseEntity).on(postEntity.exercise_data_id.eq(exerciseEntity.exerciseId))
                 .where(ltPostId(lastPostId),
                         userEntity.email.in(followingList),
                         checkExerciseType(searchType),
@@ -63,14 +60,13 @@ public class PostCustomRepositoryImpl implements PostCustomRepository{
                                 postEntity.postId,
                                 postEntity.content,
                                 imageEntity.imageUrl,
-                                exerciseEntity.type,
+                                postEntity.type,
                                 postEntity.createdAt
                         )
                 )
                 .from(postEntity)
                 .join(userEntity).on(postEntity.email.eq(userEntity.email))
                 .join(imageEntity).on(postEntity.postId.eq(imageEntity.postId))
-                .join(exerciseEntity).on(postEntity.exercise_data_id.eq(exerciseEntity.exerciseId))
                 .where(ltPostId(lastPostId),
                         checkExerciseType(searchType),
                         postIdIsNotNull())
@@ -125,27 +121,12 @@ public class PostCustomRepositoryImpl implements PostCustomRepository{
         return postEntity.postId.isNotNull();
     }
 
-//    private BooleanExpression checkFollowing(List<String> followingList, String email)
-//    {
-//        Boolean check = false;
-//        Iterator<String> iterator =  followingList.iterator();
-//        while(iterator.hasNext()) {
-//            if(iterator.next().equals(email)) {
-//                check = true;
-//            }
-//        }
-//        if(check) {
-//            return userEntity.email.in(followingList);
-//        } else {
-//            return null;
-//        }
-//    }
 
     private BooleanExpression checkExerciseType(String searchType) {
         if(searchType == null || searchType.isEmpty()) {
             return null;
         }
-        return exerciseEntity.type.eq(searchType);
+        return postEntity.type.eq(searchType);
     }
 
     private Slice<PostPaginationDto> checkLastPage(Pageable pageable, List<PostPaginationDto> results) {
