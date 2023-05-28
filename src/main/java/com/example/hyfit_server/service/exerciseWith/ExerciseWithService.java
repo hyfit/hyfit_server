@@ -2,6 +2,7 @@ package com.example.hyfit_server.service.exerciseWith;
 
 import com.example.hyfit_server.config.response.BaseException;
 import com.example.hyfit_server.domain.exercise.ExerciseEntity;
+import com.example.hyfit_server.domain.exercise.ExerciseRepository;
 import com.example.hyfit_server.domain.exercise.ExerciseWithEntity;
 import com.example.hyfit_server.domain.exercise.ExerciseWithRepository;
 import com.example.hyfit_server.dto.exercise.ExerciseWithDto;
@@ -9,6 +10,7 @@ import com.example.hyfit_server.dto.exercise.ExerciseWithReq;
 import com.example.hyfit_server.dto.exercise.ExerciseWithStart;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ExerciseWithService {
     private final ExerciseWithRepository exerciseWithRepository;
+    private final ExerciseRepository exerciseRepository;
 
     public ExerciseWithDto requestExercise(String user1Email, ExerciseWithReq exerciseWithReq)  throws BaseException {
         ExerciseWithEntity exerciseWithEntity = ExerciseWithEntity.builder()
@@ -45,6 +48,14 @@ public class ExerciseWithService {
 
     public Integer deleteExerciseWith(int exerciseWithId)  throws BaseException{
         ExerciseWithEntity exerciseWithEntity = exerciseWithRepository.findByExerciseWithId(exerciseWithId);
+        if(exerciseWithEntity.getUser1ExerciseId()!=0){
+           ExerciseEntity exerciseEntity = exerciseRepository.findByExerciseId(exerciseWithEntity.getUser1ExerciseId());
+           exerciseRepository.delete(exerciseEntity);
+        }
+        if(exerciseWithEntity.getUser2ExerciseId()!=0){
+            ExerciseEntity exerciseEntity = exerciseRepository.findByExerciseId(exerciseWithEntity.getUser2ExerciseId());
+            exerciseRepository.delete(exerciseEntity);
+        }
         exerciseWithRepository.delete(exerciseWithEntity);
         return exerciseWithId;
     }

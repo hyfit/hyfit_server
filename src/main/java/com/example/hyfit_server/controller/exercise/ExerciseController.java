@@ -79,4 +79,16 @@ public class ExerciseController {
         return new BaseResponse<>(exerciseId);
     }
 
+    @GetMapping("/all")
+    public BaseResponse<List<ExerciseDto>> getAllExercise(HttpServletRequest request) throws  BaseException{
+        try{
+            String email = userService.getEmailFromToken(request);
+            List<ExerciseDto> result = exerciseService.getAllExercise(email);
+            return new BaseResponse<>(result);
+        }
+        catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 }
