@@ -8,6 +8,7 @@ import com.example.hyfit_server.domain.exercise.ExerciseRepository;
 import com.example.hyfit_server.dto.exercise.ExerciseDto;
 import com.example.hyfit_server.dto.exercise.ExerciseEndReq;
 import com.example.hyfit_server.dto.exercise.ExerciseStartReq;
+import com.example.hyfit_server.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
+
 
     public ExerciseDto exerciseStart(String userEmail,ExerciseStartReq exerciseStartReq)  throws BaseException {
         ExerciseEntity exerciseEntity = ExerciseEntity.builder().
@@ -54,6 +56,13 @@ public class ExerciseService {
         ExerciseDto result = exerciseRepository.findByExerciseId(exerciseId).toDto();
         return result;
 
+    }
+
+    public List<ExerciseDto> getAllExercise(String email) throws BaseException{
+        List<ExerciseDto> result = exerciseRepository.findAllByEmail(email).stream()
+                .map(m -> m.toDto())
+                .collect(Collectors.toList());
+        return result;
     }
 
 
