@@ -8,6 +8,7 @@ import com.example.hyfit_server.domain.exercise.ExerciseRepository;
 import com.example.hyfit_server.dto.exercise.ExerciseDto;
 import com.example.hyfit_server.dto.exercise.ExerciseEndReq;
 import com.example.hyfit_server.dto.exercise.ExerciseStartReq;
+import com.example.hyfit_server.service.user.GoalService;
 import com.example.hyfit_server.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
+    private final GoalService goalService;
 
 
     public ExerciseDto exerciseStart(String userEmail,ExerciseStartReq exerciseStartReq)  throws BaseException {
@@ -41,6 +43,9 @@ public class ExerciseService {
     public ExerciseDto exerciseEnd(ExerciseEndReq exerciseEndReq) throws BaseException{
         ExerciseEntity exerciseEntity = exerciseRepository.findByExerciseId(exerciseEndReq.getExerciseId());
         exerciseEntity.exerciseEnd(exerciseEndReq);
+        if(exerciseEntity.getGoalId() > 0) {
+            goalService.modifyGoal(exerciseEntity.getGoalId(),exerciseEntity.getIncrease());
+        }
         return exerciseEntity.toDto();
     }
 
