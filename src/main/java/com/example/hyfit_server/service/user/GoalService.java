@@ -107,10 +107,10 @@ public class GoalService {
         GoalEntity goalEntity = goalRepository.findByGoalId(id);
         PlaceEntity placeEntity = placeRepository.findByName(goalEntity.getPlace());
         Double prevGain = 0.0;
-        if(goalEntity.getGain() == null){
+        if(goalEntity.getGain() == null || Double.parseDouble(goalEntity.getGain()) <= 0.0){
             prevGain = 0.0;
         }
-        else Double.parseDouble(goalEntity.getGain());
+        else prevGain = Double.parseDouble(goalEntity.getGain());
         Double totalGain = Double.parseDouble(gain) + prevGain;
         String totalRate = String.format("%.2f",((totalGain / Double.parseDouble(placeEntity.getAltitude())))*100);
         if(Double.parseDouble(totalRate) >= 100) { // 달성 완료
